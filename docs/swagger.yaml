@@ -1,0 +1,62 @@
+definitions:
+  dto.GetUserByEmailResponse:
+    properties:
+      avatar_url:
+        type: string
+      first_name:
+        type: string
+      id:
+        type: string
+      last_name:
+        type: string
+    type: object
+  error.ErrorResponse:
+    properties:
+      error:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: This is the backend API for the HS project
+  title: HS Backend API
+  version: "1.0"
+paths:
+  /api/users:
+    get:
+      consumes:
+      - application/json
+      description: Returns user info by email query param
+      parameters:
+      - description: Email address
+        in: query
+        name: email
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.GetUserByEmailResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/error.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/error.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get user by email
+      tags:
+      - Users
+securityDefinitions:
+  BearerAuth:
+    description: Type "Bearer" followed by a space and your token.
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
