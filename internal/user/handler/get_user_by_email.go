@@ -7,7 +7,6 @@ import (
 	"hs-backend/internal/shared"
 	"hs-backend/internal/user"
 	"hs-backend/internal/user/dto"
-	"hs-backend/internal/user/query"
 
 	"github.com/gin-gonic/gin"
 )
@@ -41,12 +40,23 @@ func (h *GetUserByEmailHandler) Handle(c *gin.Context) {
 	}
 
 	repo := user.NewRepository(h.Deps.DB)
-	handler := query.NewGetUserByEmailHandler(repo)
 
-	userDTO, err := handler.Handle(input)
+	u, err := repo.FindByEmail(input.Email)
 	if err != nil {
 		c.JSON(http.StatusNotFound, error.ErrorResponse{Error: "User not found"})
 		return
+	}
+
+	userDTO := &dto.GetUserByEmailResponse{
+		ID:        u.ID.String(),
+		FirstName: u.FirstName,
+		LastName:  u.LastName,
+		AvatarURL: func() string {
+			if u.AvatarURL != nil {
+				return *u.AvatarURL
+			}
+			return ""
+		}(),
 	}
 
 	c.JSON(http.StatusOK, userDTO)

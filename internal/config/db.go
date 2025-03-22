@@ -30,11 +30,7 @@ func InitDB() *gorm.DB {
 			GetEnvOrPanic("DB_SSLMODE"),
 		)
 
-		env := GetEnv("ENV", "development")
-		logLevel := logger.Warn
-		if env == "development" {
-			logLevel = logger.Info
-		}
+		logLevel := GetEnvAsInt("GORM_LOG_LEVEL", int(logger.Warn))
 
 		var err error
 		const maxRetries = 3
@@ -42,7 +38,7 @@ func InitDB() *gorm.DB {
 
 		for i := 1; i <= maxRetries; i++ {
 			db, err = gorm.Open(postgres.Open(dsn), &gorm.Config{
-				Logger: logger.Default.LogMode(logLevel),
+				Logger: logger.Default.LogMode(logger.LogLevel(logLevel)),
 			})
 
 			if err == nil {
