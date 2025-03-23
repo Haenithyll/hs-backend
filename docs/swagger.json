@@ -8,6 +8,89 @@
     },
     "host": "localhost:8080",
     "paths": {
+        "/api/facets": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Returns facets",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Facets"
+                ],
+                "summary": "Get facets",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.GetFacetsResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/error.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Creates a new facet",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Facets"
+                ],
+                "summary": "Create facet",
+                "parameters": [
+                    {
+                        "description": "Facet",
+                        "name": "facet",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.CreateFacetInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.CreateFacetResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/error.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/error.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/api/users": {
             "get": {
                 "security": [
@@ -59,19 +142,84 @@
         }
     },
     "definitions": {
+        "dto.CreateFacetInput": {
+            "type": "object",
+            "required": [
+                "color",
+                "configuration",
+                "privateLabel",
+                "publicLabel"
+            ],
+            "properties": {
+                "color": {
+                    "type": "string"
+                },
+                "configuration": {
+                    "$ref": "#/definitions/model.FacetConfig"
+                },
+                "privateLabel": {
+                    "type": "string"
+                },
+                "publicLabel": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.CreateFacetResponse": {
+            "type": "object",
+            "properties": {
+                "facet": {
+                    "$ref": "#/definitions/dto.FacetResponse"
+                }
+            }
+        },
+        "dto.FacetResponse": {
+            "type": "object",
+            "properties": {
+                "color": {
+                    "type": "string"
+                },
+                "configuration": {
+                    "$ref": "#/definitions/model.FacetConfig"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "privateLabel": {
+                    "type": "string"
+                },
+                "publicLabel": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.GetFacetsResponse": {
+            "type": "object",
+            "properties": {
+                "facets": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.FacetResponse"
+                    }
+                }
+            }
+        },
         "dto.GetUserByEmailResponse": {
             "type": "object",
             "properties": {
-                "avatar_url": {
+                "avatarUrl": {
                     "type": "string"
                 },
-                "first_name": {
+                "firstName": {
                     "type": "string"
                 },
                 "id": {
                     "type": "string"
                 },
-                "last_name": {
+                "lastName": {
                     "type": "string"
                 }
             }
@@ -83,6 +231,39 @@
                     "type": "string"
                 }
             }
+        },
+        "model.FacetConfig": {
+            "type": "object",
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.FacetConfigItem"
+                    }
+                }
+            }
+        },
+        "model.FacetConfigItem": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "status": {
+                    "$ref": "#/definitions/model.FacetStatus"
+                }
+            }
+        },
+        "model.FacetStatus": {
+            "type": "string",
+            "enum": [
+                "available",
+                "emergency-only"
+            ],
+            "x-enum-varnames": [
+                "Available",
+                "EmergencyOnly"
+            ]
         }
     },
     "securityDefinitions": {

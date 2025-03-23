@@ -1,13 +1,56 @@
 definitions:
+  dto.CreateFacetInput:
+    properties:
+      color:
+        type: string
+      configuration:
+        $ref: '#/definitions/model.FacetConfig'
+      privateLabel:
+        type: string
+      publicLabel:
+        type: string
+    required:
+    - color
+    - configuration
+    - privateLabel
+    - publicLabel
+    type: object
+  dto.CreateFacetResponse:
+    properties:
+      facet:
+        $ref: '#/definitions/dto.FacetResponse'
+    type: object
+  dto.FacetResponse:
+    properties:
+      color:
+        type: string
+      configuration:
+        $ref: '#/definitions/model.FacetConfig'
+      createdAt:
+        type: string
+      id:
+        type: integer
+      privateLabel:
+        type: string
+      publicLabel:
+        type: string
+    type: object
+  dto.GetFacetsResponse:
+    properties:
+      facets:
+        items:
+          $ref: '#/definitions/dto.FacetResponse'
+        type: array
+    type: object
   dto.GetUserByEmailResponse:
     properties:
-      avatar_url:
+      avatarUrl:
         type: string
-      first_name:
+      firstName:
         type: string
       id:
         type: string
-      last_name:
+      lastName:
         type: string
     type: object
   error.ErrorResponse:
@@ -15,6 +58,28 @@ definitions:
       error:
         type: string
     type: object
+  model.FacetConfig:
+    properties:
+      items:
+        items:
+          $ref: '#/definitions/model.FacetConfigItem'
+        type: array
+    type: object
+  model.FacetConfigItem:
+    properties:
+      id:
+        type: integer
+      status:
+        $ref: '#/definitions/model.FacetStatus'
+    type: object
+  model.FacetStatus:
+    enum:
+    - available
+    - emergency-only
+    type: string
+    x-enum-varnames:
+    - Available
+    - EmergencyOnly
 host: localhost:8080
 info:
   contact: {}
@@ -22,6 +87,58 @@ info:
   title: HS Backend API
   version: "1.0"
 paths:
+  /api/facets:
+    get:
+      consumes:
+      - application/json
+      description: Returns facets
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.GetFacetsResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/error.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get facets
+      tags:
+      - Facets
+    post:
+      consumes:
+      - application/json
+      description: Creates a new facet
+      parameters:
+      - description: Facet
+        in: body
+        name: facet
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateFacetInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.CreateFacetResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/error.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/error.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Create facet
+      tags:
+      - Facets
   /api/users:
     get:
       consumes:

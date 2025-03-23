@@ -1,21 +1,21 @@
-package handler
+package user
 
 import (
 	"net/http"
 
+	dto "hs-backend/internal/dto/user"
 	"hs-backend/internal/error"
-	"hs-backend/internal/shared"
-	"hs-backend/internal/user"
-	"hs-backend/internal/user/dto"
+	"hs-backend/internal/handler"
+	"hs-backend/internal/repository"
 
 	"github.com/gin-gonic/gin"
 )
 
 type GetUserByEmailHandler struct {
-	Deps *shared.HandlerDeps
+	Deps *handler.HandlerDeps
 }
 
-func NewGetUserByEmailHandler(deps *shared.HandlerDeps) *GetUserByEmailHandler {
+func NewGetUserByEmailHandler(deps *handler.HandlerDeps) *GetUserByEmailHandler {
 	return &GetUserByEmailHandler{deps}
 }
 
@@ -39,7 +39,7 @@ func (h *GetUserByEmailHandler) Handle(c *gin.Context) {
 		return
 	}
 
-	repo := user.NewRepository(h.Deps.DB)
+	repo := repository.NewUserRepository(h.Deps.DB)
 
 	u, err := repo.FindByEmail(input.Email)
 	if err != nil {
