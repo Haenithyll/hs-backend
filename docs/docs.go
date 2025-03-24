@@ -37,7 +37,10 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/dto.GetFacetsResponse"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/dto.GetFacetResponseItem"
+                            }
                         }
                     },
                     "500": {
@@ -85,6 +88,12 @@ const docTemplate = `{
                     },
                     "400": {
                         "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/error.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
                         "schema": {
                             "$ref": "#/definitions/error.ErrorResponse"
                         }
@@ -146,6 +155,200 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/api/users/communication-services": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Returns user communication services",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User Communication Services"
+                ],
+                "summary": "Get user communication services",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/dto.GetUserCommunicationServicesResponseItem"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/error.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Creates a new user communication service",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User Communication Services"
+                ],
+                "summary": "Create user communication service",
+                "parameters": [
+                    {
+                        "description": "User Communication Service",
+                        "name": "userCommunicationService",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.CreateUserCommunicationServiceInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.CreateUserCommunicationServiceResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/error.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/error.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/users/communication-services/{userCommunicationServiceId}": {
+            "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Deletes a user communication service",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User Communication Services"
+                ],
+                "summary": "Delete user communication service",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "User Communication Service ID",
+                        "name": "userCommunicationServiceId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/error.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/error.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/error.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Updates a user communication service",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User Communication Services"
+                ],
+                "summary": "Update user communication service",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "User Communication Service ID",
+                        "name": "userCommunicationServiceId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "User Communication Service",
+                        "name": "userCommunicationService",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.UpdateUserCommunicationServiceInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.UpdateUserCommunicationServiceResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/error.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/error.ErrorResponse"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -162,7 +365,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "configuration": {
-                    "$ref": "#/definitions/model.FacetConfig"
+                    "$ref": "#/definitions/json.FacetConfig"
                 },
                 "privateLabel": {
                     "type": "string"
@@ -175,19 +378,11 @@ const docTemplate = `{
         "dto.CreateFacetResponse": {
             "type": "object",
             "properties": {
-                "facet": {
-                    "$ref": "#/definitions/dto.FacetResponse"
-                }
-            }
-        },
-        "dto.FacetResponse": {
-            "type": "object",
-            "properties": {
                 "color": {
                     "type": "string"
                 },
                 "configuration": {
-                    "$ref": "#/definitions/model.FacetConfig"
+                    "$ref": "#/definitions/json.FacetConfig"
                 },
                 "createdAt": {
                     "type": "string"
@@ -203,14 +398,65 @@ const docTemplate = `{
                 }
             }
         },
-        "dto.GetFacetsResponse": {
+        "dto.CreateUserCommunicationServiceInput": {
+            "type": "object",
+            "required": [
+                "name",
+                "service",
+                "value"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "service": {
+                    "type": "string"
+                },
+                "value": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.CreateUserCommunicationServiceResponse": {
             "type": "object",
             "properties": {
-                "facets": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/dto.FacetResponse"
-                    }
+                "createdAt": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "service": {
+                    "$ref": "#/definitions/enum.CommunicationService"
+                },
+                "value": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.GetFacetResponseItem": {
+            "type": "object",
+            "properties": {
+                "color": {
+                    "type": "string"
+                },
+                "configuration": {
+                    "$ref": "#/definitions/json.FacetConfig"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "privateLabel": {
+                    "type": "string"
+                },
+                "publicLabel": {
+                    "type": "string"
                 }
             }
         },
@@ -231,37 +477,77 @@ const docTemplate = `{
                 }
             }
         },
-        "error.ErrorResponse": {
-            "type": "object",
-            "properties": {
-                "error": {
-                    "type": "string"
-                }
-            }
-        },
-        "model.FacetConfig": {
-            "type": "object",
-            "properties": {
-                "items": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/model.FacetConfigItem"
-                    }
-                }
-            }
-        },
-        "model.FacetConfigItem": {
+        "dto.GetUserCommunicationServicesResponseItem": {
             "type": "object",
             "properties": {
                 "id": {
                     "type": "integer"
                 },
-                "status": {
-                    "$ref": "#/definitions/model.FacetStatus"
+                "name": {
+                    "type": "string"
+                },
+                "service": {
+                    "$ref": "#/definitions/enum.CommunicationService"
+                },
+                "value": {
+                    "type": "string"
                 }
             }
         },
-        "model.FacetStatus": {
+        "dto.UpdateUserCommunicationServiceInput": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "serviceType": {
+                    "$ref": "#/definitions/enum.CommunicationService"
+                },
+                "value": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.UpdateUserCommunicationServiceResponse": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "service": {
+                    "$ref": "#/definitions/enum.CommunicationService"
+                },
+                "value": {
+                    "type": "string"
+                }
+            }
+        },
+        "enum.CommunicationService": {
+            "type": "string",
+            "enum": [
+                "face-to-face",
+                "phone",
+                "message",
+                "email",
+                "discord",
+                "microsoft-teams"
+            ],
+            "x-enum-varnames": [
+                "FaceToFace",
+                "Phone",
+                "Message",
+                "Email",
+                "Discord",
+                "MicrosoftTeams"
+            ]
+        },
+        "enum.FacetStatus": {
             "type": "string",
             "enum": [
                 "available",
@@ -271,6 +557,36 @@ const docTemplate = `{
                 "Available",
                 "EmergencyOnly"
             ]
+        },
+        "error.ErrorResponse": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string"
+                }
+            }
+        },
+        "json.FacetConfig": {
+            "type": "object",
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/json.FacetConfigItem"
+                    }
+                }
+            }
+        },
+        "json.FacetConfigItem": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "status": {
+                    "$ref": "#/definitions/enum.FacetStatus"
+                }
+            }
         }
     },
     "securityDefinitions": {

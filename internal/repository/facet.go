@@ -1,7 +1,6 @@
 package repository
 
 import (
-	dto "hs-backend/internal/dto/facet"
 	"hs-backend/internal/model"
 
 	"github.com/google/uuid"
@@ -10,7 +9,8 @@ import (
 
 type FacetRepository interface {
 	FindByUserId(userId uuid.UUID) ([]model.Facet, error)
-	Create(input dto.CreateFacetInput, userId uuid.UUID) (*model.Facet, error)
+
+	Create(facet *model.Facet) error
 }
 
 type facetRepository struct {
@@ -29,18 +29,9 @@ func (r *facetRepository) FindByUserId(userId uuid.UUID) ([]model.Facet, error) 
 	return facets, nil
 }
 
-func (r *facetRepository) Create(input dto.CreateFacetInput, userId uuid.UUID) (*model.Facet, error) {
-	facet := model.Facet{
-		Color:         input.Color,
-		PublicLabel:   input.PublicLabel,
-		PrivateLabel:  input.PrivateLabel,
-		Configuration: input.Configuration,
-		UserId:        userId,
-	}
-
+func (r *facetRepository) Create(facet *model.Facet) error {
 	if err := r.db.Create(&facet).Error; err != nil {
-		return nil, err
+		return err
 	}
-
-	return &facet, nil
+	return nil
 }

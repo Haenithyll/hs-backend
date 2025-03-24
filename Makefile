@@ -29,3 +29,16 @@ clean-docs:
 dev:
 	@echo "🚀 Running the server..."
 	go run $(MAIN_FILE)
+
+lint:
+	@echo "🚀 Running lint..."
+	golangci-lint run --fix
+	@echo "✅ Lint passed."
+
+check:
+	@echo "🚀 Running check..."
+	go fmt ./...
+	go vet ./...
+	go mod tidy
+	golangci-lint run --fix
+	@echo "✅ Check passed."

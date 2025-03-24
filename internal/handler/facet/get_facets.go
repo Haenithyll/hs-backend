@@ -1,10 +1,7 @@
 package facet
 
 import (
-	"net/http"
-
 	dto "hs-backend/internal/dto/facet"
-	"hs-backend/internal/error"
 	"hs-backend/internal/handler"
 	"hs-backend/internal/repository"
 
@@ -37,13 +34,9 @@ func (h *GetFacetsHandler) Handle(c *gin.Context) {
 
 	facets, err := repo.FindByUserId(userId)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, error.ErrorResponse{Error: "Failed to get facets"})
+		handler.InternalError(c, "Failed to get facets: "+err.Error())
 		return
 	}
 
-	facetsDTO := &dto.GetFacetsResponse{
-		Facets: dto.ToFacetResponses(facets),
-	}
-
-	c.JSON(http.StatusOK, facetsDTO)
+	handler.OK(c, dto.ToGetFacetsResponse(facets))
 }

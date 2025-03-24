@@ -5,8 +5,8 @@ import (
 	"net/http"
 
 	dto "hs-backend/internal/dto/facet"
-	"hs-backend/internal/error"
 	"hs-backend/internal/handler"
+	"hs-backend/internal/model"
 	"hs-backend/internal/repository"
 
 	"github.com/gin-gonic/gin"
@@ -31,18 +31,19 @@ func NewCreateFacetHandler(deps *handler.HandlerDeps) *CreateFacetHandler {
 // @Param facet body dto.CreateFacetInput true "Facet"
 // @Success 200 {object} dto.CreateFacetResponse
 // @Failure 400 {object} error.ErrorResponse
+// @Failure 404 {object} error.ErrorResponse
 // @Failure 500 {object} error.ErrorResponse
 // @Router /api/facets [post]
 func (h *CreateFacetHandler) Handle(c *gin.Context) {
 	var input dto.CreateFacetInput
 
 	if err := c.ShouldBind(&input); err != nil {
-		c.JSON(http.StatusBadRequest, error.ErrorResponse{Error: "Invalid input format"})
+		handler.BadRequest(c, err.Error())
 		return
 	}
 
 	if err := input.Validate(); err != nil {
-		c.JSON(http.StatusBadRequest, error.ErrorResponse{Error: err.Error()})
+		handler.BadRequest(c, err.Error())
 		return
 	}
 
@@ -51,7 +52,7 @@ func (h *CreateFacetHandler) Handle(c *gin.Context) {
 	userCommunicationServiceRepo := repository.NewUserCommunicationServiceRepository(h.Deps.DB)
 	userCommunicationServiceIds, err := userCommunicationServiceRepo.FindIDsByUserId(userId)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, error.ErrorResponse{Error: "Failed to find user communication services"})
+		handler.InternalError(c, "Failed to find user communication services")
 		return
 	}
 
@@ -62,24 +63,26 @@ func (h *CreateFacetHandler) Handle(c *gin.Context) {
 
 	for _, item := range input.Configuration.Items {
 		if !validServiceIDs[uint8(item.Id)] {
-			c.JSON(http.StatusBadRequest, error.ErrorResponse{
-				Error: fmt.Sprintf("Invalid communication service ID: %d", item.Id),
-			})
+			handler.NotFound(c, fmt.Sprintf("Communication service with ID %d not found", item.Id))
 			return
 		}
 	}
 
 	repo := repository.NewFacetRepository(h.Deps.DB)
 
-	f, err := repo.Create(input, userId)
+	facet := model.Facet{
+		Color:         input.Color,
+		PublicLabel:   input.PublicLabel,
+		PrivateLabel:  input.PrivateLabel,
+		Configuration: input.Configuration,
+		UserId:        userId,
+	}
+
+	err = repo.Create(&facet)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, error.ErrorResponse{Error: "Failed to create facet"})
+		handler.InternalError(c, "Failed to create facet: "+err.Error())
 		return
 	}
 
-	facetDTO := &dto.CreateFacetResponse{
-		Facet: dto.ToFacetResponse(*f),
-	}
-
-	c.JSON(http.StatusOK, facetDTO)
+	c.JSON(http.StatusOK, dto.ToCreateFacetResponse(facet))
 }

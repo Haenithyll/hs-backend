@@ -19,7 +19,7 @@ import (
 
 	_ "hs-backend/docs"
 	"hs-backend/internal/config"
-	"hs-backend/internal/routes"
+	"hs-backend/internal/route"
 )
 
 func main() {
@@ -30,12 +30,14 @@ func main() {
 	port := config.GetEnv("PORT", "8080")
 
 	r := gin.Default()
-	r.SetTrustedProxies(nil)
+	if err := r.SetTrustedProxies(nil); err != nil {
+		log.Fatalf("Failed to set trusted proxies: %v", err)
+	}
 
 	if config.GetEnv("ENV", "development") == "development" {
 		r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	}
-	routes.RegisterRoutes(r, db)
+	route.RegisterRoutes(r, db)
 
 	log.Printf("Server running on port %s...", port)
 	if err := r.Run(":" + port); err != nil {

@@ -4,7 +4,7 @@ definitions:
       color:
         type: string
       configuration:
-        $ref: '#/definitions/model.FacetConfig'
+        $ref: '#/definitions/json.FacetConfig'
       privateLabel:
         type: string
       publicLabel:
@@ -17,15 +17,10 @@ definitions:
     type: object
   dto.CreateFacetResponse:
     properties:
-      facet:
-        $ref: '#/definitions/dto.FacetResponse'
-    type: object
-  dto.FacetResponse:
-    properties:
       color:
         type: string
       configuration:
-        $ref: '#/definitions/model.FacetConfig'
+        $ref: '#/definitions/json.FacetConfig'
       createdAt:
         type: string
       id:
@@ -35,12 +30,46 @@ definitions:
       publicLabel:
         type: string
     type: object
-  dto.GetFacetsResponse:
+  dto.CreateUserCommunicationServiceInput:
     properties:
-      facets:
-        items:
-          $ref: '#/definitions/dto.FacetResponse'
-        type: array
+      name:
+        type: string
+      service:
+        type: string
+      value:
+        type: string
+    required:
+    - name
+    - service
+    - value
+    type: object
+  dto.CreateUserCommunicationServiceResponse:
+    properties:
+      createdAt:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      service:
+        $ref: '#/definitions/enum.CommunicationService'
+      value:
+        type: string
+    type: object
+  dto.GetFacetResponseItem:
+    properties:
+      color:
+        type: string
+      configuration:
+        $ref: '#/definitions/json.FacetConfig'
+      createdAt:
+        type: string
+      id:
+        type: integer
+      privateLabel:
+        type: string
+      publicLabel:
+        type: string
     type: object
   dto.GetUserByEmailResponse:
     properties:
@@ -53,26 +82,56 @@ definitions:
       lastName:
         type: string
     type: object
-  error.ErrorResponse:
-    properties:
-      error:
-        type: string
-    type: object
-  model.FacetConfig:
-    properties:
-      items:
-        items:
-          $ref: '#/definitions/model.FacetConfigItem'
-        type: array
-    type: object
-  model.FacetConfigItem:
+  dto.GetUserCommunicationServicesResponseItem:
     properties:
       id:
         type: integer
-      status:
-        $ref: '#/definitions/model.FacetStatus'
+      name:
+        type: string
+      service:
+        $ref: '#/definitions/enum.CommunicationService'
+      value:
+        type: string
     type: object
-  model.FacetStatus:
+  dto.UpdateUserCommunicationServiceInput:
+    properties:
+      name:
+        type: string
+      serviceType:
+        $ref: '#/definitions/enum.CommunicationService'
+      value:
+        type: string
+    type: object
+  dto.UpdateUserCommunicationServiceResponse:
+    properties:
+      createdAt:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      service:
+        $ref: '#/definitions/enum.CommunicationService'
+      value:
+        type: string
+    type: object
+  enum.CommunicationService:
+    enum:
+    - face-to-face
+    - phone
+    - message
+    - email
+    - discord
+    - microsoft-teams
+    type: string
+    x-enum-varnames:
+    - FaceToFace
+    - Phone
+    - Message
+    - Email
+    - Discord
+    - MicrosoftTeams
+  enum.FacetStatus:
     enum:
     - available
     - emergency-only
@@ -80,6 +139,25 @@ definitions:
     x-enum-varnames:
     - Available
     - EmergencyOnly
+  error.ErrorResponse:
+    properties:
+      error:
+        type: string
+    type: object
+  json.FacetConfig:
+    properties:
+      items:
+        items:
+          $ref: '#/definitions/json.FacetConfigItem'
+        type: array
+    type: object
+  json.FacetConfigItem:
+    properties:
+      id:
+        type: integer
+      status:
+        $ref: '#/definitions/enum.FacetStatus'
+    type: object
 host: localhost:8080
 info:
   contact: {}
@@ -98,7 +176,9 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/dto.GetFacetsResponse'
+            items:
+              $ref: '#/definitions/dto.GetFacetResponseItem'
+            type: array
         "500":
           description: Internal Server Error
           schema:
@@ -128,6 +208,10 @@ paths:
             $ref: '#/definitions/dto.CreateFacetResponse'
         "400":
           description: Bad Request
+          schema:
+            $ref: '#/definitions/error.ErrorResponse'
+        "404":
+          description: Not Found
           schema:
             $ref: '#/definitions/error.ErrorResponse'
         "500":
@@ -170,6 +254,129 @@ paths:
       summary: Get user by email
       tags:
       - Users
+  /api/users/communication-services:
+    get:
+      consumes:
+      - application/json
+      description: Returns user communication services
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/dto.GetUserCommunicationServicesResponseItem'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/error.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get user communication services
+      tags:
+      - User Communication Services
+    post:
+      consumes:
+      - application/json
+      description: Creates a new user communication service
+      parameters:
+      - description: User Communication Service
+        in: body
+        name: userCommunicationService
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateUserCommunicationServiceInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.CreateUserCommunicationServiceResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/error.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/error.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Create user communication service
+      tags:
+      - User Communication Services
+  /api/users/communication-services/{userCommunicationServiceId}:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes a user communication service
+      parameters:
+      - description: User Communication Service ID
+        in: path
+        name: userCommunicationServiceId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/error.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/error.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/error.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Delete user communication service
+      tags:
+      - User Communication Services
+    patch:
+      consumes:
+      - application/json
+      description: Updates a user communication service
+      parameters:
+      - description: User Communication Service ID
+        in: path
+        name: userCommunicationServiceId
+        required: true
+        type: integer
+      - description: User Communication Service
+        in: body
+        name: userCommunicationService
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdateUserCommunicationServiceInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.UpdateUserCommunicationServiceResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/error.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/error.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Update user communication service
+      tags:
+      - User Communication Services
 securityDefinitions:
   BearerAuth:
     description: Type "Bearer" followed by a space and your token.
