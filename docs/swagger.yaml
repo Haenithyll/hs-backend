@@ -93,6 +93,19 @@ definitions:
       value:
         type: string
     type: object
+  dto.GetUserMeResponse:
+    properties:
+      avatarUrl:
+        type: string
+      email:
+        type: string
+      firstName:
+        type: string
+      id:
+        type: string
+      lastName:
+        type: string
+    type: object
   dto.UpdateUserCommunicationServiceInput:
     properties:
       name:
@@ -377,6 +390,27 @@ paths:
       summary: Update user communication service
       tags:
       - User Communication Services
+  /api/users/me:
+    get:
+      consumes:
+      - application/json
+      description: Returns user me
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.GetUserMeResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/error.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get user me
+      tags:
+      - Users
 securityDefinitions:
   BearerAuth:
     description: Type "Bearer" followed by a space and your token.

@@ -28,6 +28,7 @@ func RegisterRoutes(r *gin.Engine, db *gorm.DB) {
 	users := authenticated.Group("/users")
 	{
 		users.GET("", userHandler.NewGetUserByEmailHandler(deps).Handle)
+		users.GET("/me", userHandler.NewGetUserMeHandler(deps).Handle)
 	}
 
 	userCommunicationServices := authenticated.Group("/users/communication-services")
