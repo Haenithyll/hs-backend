@@ -35,7 +35,7 @@ definitions:
       name:
         type: string
       service:
-        type: string
+        $ref: '#/definitions/enum.CommunicationService'
       value:
         type: string
     required:
@@ -110,7 +110,7 @@ definitions:
     properties:
       name:
         type: string
-      serviceType:
+      service:
         $ref: '#/definitions/enum.CommunicationService'
       value:
         type: string

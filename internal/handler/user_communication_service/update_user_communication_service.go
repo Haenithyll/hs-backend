@@ -64,8 +64,8 @@ func (h *UpdateUserCommunicationServiceHandler) Handle(c *gin.Context) {
 	if input.Value != nil {
 		ucs.Value = *input.Value
 	}
-	if input.ServiceType != nil {
-		ucs.Service = *input.ServiceType
+	if input.Service != nil {
+		ucs.Service = *input.Service
 	}
 
 	err = userCommunicationServiceRepo.Update(ucs)

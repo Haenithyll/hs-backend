@@ -6,9 +6,9 @@ import (
 )
 
 type CreateUserCommunicationServiceInput struct {
-	Name    string `json:"name" binding:"required"`
-	Value   string `json:"value" binding:"required"`
-	Service string `json:"service" binding:"required"`
+	Name    string                    `json:"name" binding:"required"`
+	Value   string                    `json:"value" binding:"required"`
+	Service enum.CommunicationService `json:"service" binding:"required"`
 }
 
 func (c *CreateUserCommunicationServiceInput) Validate() error {

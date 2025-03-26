@@ -437,7 +437,7 @@
                     "type": "string"
                 },
                 "service": {
-                    "type": "string"
+                    "$ref": "#/definitions/enum.CommunicationService"
                 },
                 "value": {
                     "type": "string"
@@ -547,7 +547,7 @@
                 "name": {
                     "type": "string"
                 },
-                "serviceType": {
+                "service": {
                     "$ref": "#/definitions/enum.CommunicationService"
                 },
                 "value": {

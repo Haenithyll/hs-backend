@@ -444,7 +444,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "service": {
-                    "type": "string"
+                    "$ref": "#/definitions/enum.CommunicationService"
                 },
                 "value": {
                     "type": "string"
@@ -554,7 +554,7 @@ const docTemplate = `{
                 "name": {
                     "type": "string"
                 },
-                "serviceType": {
+                "service": {
                     "$ref": "#/definitions/enum.CommunicationService"
                 },
                 "value": {
