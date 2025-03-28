@@ -3,6 +3,7 @@ package route
 import (
 	"hs-backend/internal/handler"
 	facetHandler "hs-backend/internal/handler/facet"
+	prismHandler "hs-backend/internal/handler/prism"
 	userHandler "hs-backend/internal/handler/user"
 	userCommunicationServiceHandler "hs-backend/internal/handler/user_communication_service"
 	"hs-backend/internal/middleware"
@@ -23,6 +24,13 @@ func RegisterRoutes(r *gin.Engine, db *gorm.DB) {
 	{
 		facets.GET("", facetHandler.NewGetFacetsHandler(deps).Handle)
 		facets.POST("", facetHandler.NewCreateFacetHandler(deps).Handle)
+		facets.PATCH(":facetId", facetHandler.NewUpdateFacetHandler(deps).Handle)
+		facets.DELETE(":facetId", facetHandler.NewDeleteFacetHandler(deps).Handle)
+	}
+
+	prisms := authenticated.Group("/prisms")
+	{
+		prisms.POST("", prismHandler.NewCreatePrismHandler(deps).Handle)
 	}
 
 	users := authenticated.Group("/users")

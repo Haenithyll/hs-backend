@@ -41,7 +41,7 @@ func (h *GetUserByEmailHandler) Handle(c *gin.Context) {
 
 	repo := repository.NewUserRepository(h.Deps.DB)
 
-	u, err := repo.FindByEmail(input.Email)
+	u, err := repo.FindOneByEmail(input.Email)
 	if err != nil {
 		c.JSON(http.StatusNotFound, error.ErrorResponse{Error: "User not found"})
 		return

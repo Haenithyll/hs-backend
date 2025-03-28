@@ -57,7 +57,7 @@ func (h *CreateUserCommunicationServiceHandler) Handle(c *gin.Context) {
 		Service: enum.CommunicationService(input.Service),
 	}
 
-	err := userCommunicationServiceRepo.Create(&ucs)
+	err := userCommunicationServiceRepo.CreateOne(&ucs)
 	if err != nil {
 		handler.InternalError(c, "Failed to create user communication service: "+err.Error())
 		return

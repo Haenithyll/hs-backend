@@ -32,7 +32,7 @@ func (h *GetUserMeHandler) Handle(c *gin.Context) {
 
 	userId := uuid.MustParse(c.MustGet("user_id").(string))
 
-	user, err := repo.FindById(userId)
+	user, err := repo.FindOneById(userId)
 	if err != nil {
 		handler.InternalError(c, "Failed to get user: "+err.Error())
 		return

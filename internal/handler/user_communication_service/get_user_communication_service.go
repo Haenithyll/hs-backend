@@ -32,7 +32,7 @@ func (h *GetUserCommunicationServiceHandler) Handle(c *gin.Context) {
 
 	userId := uuid.MustParse(c.MustGet("user_id").(string))
 
-	ucsList, err := repo.FindByUserId(userId)
+	ucsList, err := repo.FindManyByUserId(userId)
 	if err != nil {
 		handler.InternalError(c, "Failed to get user communication services: "+err.Error())
 		return

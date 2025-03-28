@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-type CreateFacetEnrichedConfigItem struct {
+type UpdateFacetEnrichedConfigItem struct {
 	Id      uint8                     `json:"id"`
 	Status  enum.FacetStatus          `json:"status"`
 	Name    string                    `json:"name"`
@@ -14,25 +14,25 @@ type CreateFacetEnrichedConfigItem struct {
 	Service enum.CommunicationService `json:"service"`
 }
 
-type CreateFacetEnrichedConfig struct {
-	Items []CreateFacetEnrichedConfigItem `json:"items"`
+type UpdateFacetEnrichedConfig struct {
+	Items []UpdateFacetEnrichedConfigItem `json:"items"`
 }
 
-type CreateFacetResponse struct {
+type UpdateFacetResponse struct {
 	ID            uint8                     `json:"id"`
 	Color         string                    `json:"color"`
 	PublicLabel   string                    `json:"publicLabel"`
 	PrivateLabel  string                    `json:"privateLabel"`
-	Configuration CreateFacetEnrichedConfig `json:"configuration"`
+	Configuration UpdateFacetEnrichedConfig `json:"configuration"`
 	CreatedAt     time.Time                 `json:"createdAt"`
 }
 
-func ToCreateFacetResponse(facet model.Facet, communicationServices []model.UserCommunicationService) CreateFacetResponse {
-	enrichedItems := make([]CreateFacetEnrichedConfigItem, len(facet.Configuration.Items))
+func ToUpdateFacetResponse(facet model.Facet, communicationServices []model.UserCommunicationService) UpdateFacetResponse {
+	enrichedItems := make([]UpdateFacetEnrichedConfigItem, len(facet.Configuration.Items))
 	for configItemIndex, configItem := range facet.Configuration.Items {
 		for _, cs := range communicationServices {
 			if cs.ID == configItem.Id {
-				enrichedItems[configItemIndex] = CreateFacetEnrichedConfigItem{
+				enrichedItems[configItemIndex] = UpdateFacetEnrichedConfigItem{
 					Id:      configItem.Id,
 					Status:  configItem.Status,
 					Name:    cs.Name,
@@ -43,12 +43,12 @@ func ToCreateFacetResponse(facet model.Facet, communicationServices []model.User
 		}
 	}
 
-	return CreateFacetResponse{
+	return UpdateFacetResponse{
 		ID:            facet.ID,
 		Color:         facet.Color,
 		PublicLabel:   facet.PublicLabel,
 		PrivateLabel:  facet.PrivateLabel,
-		Configuration: CreateFacetEnrichedConfig{Items: enrichedItems},
+		Configuration: UpdateFacetEnrichedConfig{Items: enrichedItems},
 		CreatedAt:     facet.CreatedAt,
 	}
 }

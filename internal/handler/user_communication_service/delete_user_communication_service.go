@@ -42,15 +42,22 @@ func (h *DeleteUserCommunicationServiceHandler) Handle(c *gin.Context) {
 		return
 	}
 
-	repo := repository.NewUserCommunicationServiceRepository(h.Deps.DB)
+	ucsRepo := repository.NewUserCommunicationServiceRepository(h.Deps.DB)
 
 	userId := uuid.MustParse(c.MustGet("user_id").(string))
-	if err := repo.DeleteByIDAndUserID(input.UserCommunicationServiceID, userId); err != nil {
+	if err := ucsRepo.DeleteOneByIDAndUserID(input.UserCommunicationServiceID, userId); err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			handler.NotFound(c, "User communication service not found")
 			return
 		}
 		handler.InternalError(c, "Failed to delete user communication service: "+err.Error())
+		return
+	}
+
+	facetRepo := repository.NewFacetRepository(h.Deps.DB)
+
+	if err := facetRepo.RemoveUserCommunicationServiceFromFacets(input.UserCommunicationServiceID); err != nil {
+		handler.InternalError(c, "Failed to apply user communication service deletion to existing facets: "+err.Error())
 		return
 	}
 

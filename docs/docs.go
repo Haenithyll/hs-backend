@@ -107,6 +107,177 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/facets/{facetId}": {
+            "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Deletes a facet",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Facets"
+                ],
+                "summary": "Delete facet",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Facet ID",
+                        "name": "facetId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/error.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/error.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/error.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Updates a facet",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Facets"
+                ],
+                "summary": "Update facet",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Facet ID",
+                        "name": "facetId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Facet",
+                        "name": "facet",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.UpdateFacetInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.UpdateFacetResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/error.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/error.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/error.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/prisms": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Creates a new prism",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Prisms"
+                ],
+                "summary": "Create prism",
+                "parameters": [
+                    {
+                        "description": "Prism",
+                        "name": "prism",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.CreatePrismInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.CreatePrismResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/error.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/error.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/error.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/api/users": {
             "get": {
                 "security": [
@@ -386,6 +557,37 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "dto.CreateFacetEnrichedConfig": {
+            "type": "object",
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.CreateFacetEnrichedConfigItem"
+                    }
+                }
+            }
+        },
+        "dto.CreateFacetEnrichedConfigItem": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "service": {
+                    "$ref": "#/definitions/enum.CommunicationService"
+                },
+                "status": {
+                    "$ref": "#/definitions/enum.FacetStatus"
+                },
+                "value": {
+                    "type": "string"
+                }
+            }
+        },
         "dto.CreateFacetInput": {
             "type": "object",
             "required": [
@@ -416,7 +618,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "configuration": {
-                    "$ref": "#/definitions/json.FacetConfig"
+                    "$ref": "#/definitions/dto.CreateFacetEnrichedConfig"
                 },
                 "createdAt": {
                     "type": "string"
@@ -428,6 +630,80 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "publicLabel": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.CreatePrismEnrichedConfig": {
+            "type": "object",
+            "properties": {
+                "base": {
+                    "$ref": "#/definitions/dto.CreatePrismFacet"
+                },
+                "users": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.CreatePrismEnrichedUserItem"
+                    }
+                }
+            }
+        },
+        "dto.CreatePrismEnrichedUserItem": {
+            "type": "object",
+            "properties": {
+                "facet": {
+                    "$ref": "#/definitions/dto.CreatePrismFacet"
+                },
+                "userId": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.CreatePrismFacet": {
+            "type": "object",
+            "properties": {
+                "color": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "privateLabel": {
+                    "type": "string"
+                },
+                "publicLabel": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.CreatePrismInput": {
+            "type": "object",
+            "required": [
+                "configuration",
+                "name"
+            ],
+            "properties": {
+                "configuration": {
+                    "$ref": "#/definitions/json.PrismConfig"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.CreatePrismResponse": {
+            "type": "object",
+            "properties": {
+                "configuration": {
+                    "$ref": "#/definitions/dto.CreatePrismEnrichedConfig"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
                     "type": "string"
                 }
             }
@@ -471,6 +747,37 @@ const docTemplate = `{
                 }
             }
         },
+        "dto.GetFacetEnrichedConfig": {
+            "type": "object",
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.GetFacetEnrichedConfigItem"
+                    }
+                }
+            }
+        },
+        "dto.GetFacetEnrichedConfigItem": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "service": {
+                    "$ref": "#/definitions/enum.CommunicationService"
+                },
+                "status": {
+                    "$ref": "#/definitions/enum.FacetStatus"
+                },
+                "value": {
+                    "type": "string"
+                }
+            }
+        },
         "dto.GetFacetResponseItem": {
             "type": "object",
             "properties": {
@@ -478,7 +785,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "configuration": {
-                    "$ref": "#/definitions/json.FacetConfig"
+                    "$ref": "#/definitions/dto.GetFacetEnrichedConfig"
                 },
                 "createdAt": {
                     "type": "string"
@@ -544,6 +851,77 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "lastName": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.UpdateFacetEnrichedConfig": {
+            "type": "object",
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.UpdateFacetEnrichedConfigItem"
+                    }
+                }
+            }
+        },
+        "dto.UpdateFacetEnrichedConfigItem": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "service": {
+                    "$ref": "#/definitions/enum.CommunicationService"
+                },
+                "status": {
+                    "$ref": "#/definitions/enum.FacetStatus"
+                },
+                "value": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.UpdateFacetInput": {
+            "type": "object",
+            "properties": {
+                "color": {
+                    "type": "string"
+                },
+                "configuration": {
+                    "$ref": "#/definitions/json.FacetConfig"
+                },
+                "privateLabel": {
+                    "type": "string"
+                },
+                "publicLabel": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.UpdateFacetResponse": {
+            "type": "object",
+            "properties": {
+                "color": {
+                    "type": "string"
+                },
+                "configuration": {
+                    "$ref": "#/definitions/dto.UpdateFacetEnrichedConfig"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "privateLabel": {
+                    "type": "string"
+                },
+                "publicLabel": {
                     "type": "string"
                 }
             }
@@ -639,6 +1017,31 @@ const docTemplate = `{
                 },
                 "status": {
                     "$ref": "#/definitions/enum.FacetStatus"
+                }
+            }
+        },
+        "json.PrismConfig": {
+            "type": "object",
+            "properties": {
+                "base": {
+                    "type": "integer"
+                },
+                "users": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/json.PrismConfigUserItem"
+                    }
+                }
+            }
+        },
+        "json.PrismConfigUserItem": {
+            "type": "object",
+            "properties": {
+                "facetId": {
+                    "type": "integer"
+                },
+                "userId": {
+                    "type": "string"
                 }
             }
         }

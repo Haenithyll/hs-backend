@@ -19,6 +19,7 @@ import (
 
 	_ "hs-backend/docs"
 	"hs-backend/internal/config"
+	"hs-backend/internal/middleware"
 	"hs-backend/internal/route"
 )
 
@@ -28,8 +29,12 @@ func main() {
 	db := config.InitDB()
 
 	port := config.GetEnv("PORT", "8080")
+	httpLog := config.GetEnv("HTTP_LOG", "false") == "true"
 
 	r := gin.Default()
+	if httpLog {
+		r.Use(middleware.LoggerMiddleware())
+	}
 	if err := r.SetTrustedProxies(nil); err != nil {
 		log.Fatalf("Failed to set trusted proxies: %v", err)
 	}

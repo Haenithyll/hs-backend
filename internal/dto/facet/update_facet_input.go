@@ -7,14 +7,15 @@ import (
 	"strings"
 )
 
-type CreateFacetInput struct {
-	Color         string           `json:"color" binding:"required"`
-	PublicLabel   string           `json:"publicLabel" binding:"required"`
-	PrivateLabel  string           `json:"privateLabel" binding:"required"`
-	Configuration json.FacetConfig `json:"configuration" binding:"required"`
+type UpdateFacetInput struct {
+	FacetID       uint8             `uri:"facetId" json:"-" binding:"required"`
+	Color         *string           `json:"color,omitempty"`
+	PublicLabel   *string           `json:"publicLabel,omitempty"`
+	PrivateLabel  *string           `json:"privateLabel,omitempty"`
+	Configuration *json.FacetConfig `json:"configuration,omitempty"`
 }
 
-func (c *CreateFacetInput) Validate() error {
+func (c *UpdateFacetInput) Validate() error {
 	var errs []string
 	for _, item := range c.Configuration.Items {
 		if !enum.FacetStatus(item.Status).IsValid() {

@@ -1,4 +1,24 @@
 definitions:
+  dto.CreateFacetEnrichedConfig:
+    properties:
+      items:
+        items:
+          $ref: '#/definitions/dto.CreateFacetEnrichedConfigItem'
+        type: array
+    type: object
+  dto.CreateFacetEnrichedConfigItem:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      service:
+        $ref: '#/definitions/enum.CommunicationService'
+      status:
+        $ref: '#/definitions/enum.FacetStatus'
+      value:
+        type: string
+    type: object
   dto.CreateFacetInput:
     properties:
       color:
@@ -20,7 +40,7 @@ definitions:
       color:
         type: string
       configuration:
-        $ref: '#/definitions/json.FacetConfig'
+        $ref: '#/definitions/dto.CreateFacetEnrichedConfig'
       createdAt:
         type: string
       id:
@@ -28,6 +48,54 @@ definitions:
       privateLabel:
         type: string
       publicLabel:
+        type: string
+    type: object
+  dto.CreatePrismEnrichedConfig:
+    properties:
+      base:
+        $ref: '#/definitions/dto.CreatePrismFacet'
+      users:
+        items:
+          $ref: '#/definitions/dto.CreatePrismEnrichedUserItem'
+        type: array
+    type: object
+  dto.CreatePrismEnrichedUserItem:
+    properties:
+      facet:
+        $ref: '#/definitions/dto.CreatePrismFacet'
+      userId:
+        type: string
+    type: object
+  dto.CreatePrismFacet:
+    properties:
+      color:
+        type: string
+      id:
+        type: integer
+      privateLabel:
+        type: string
+      publicLabel:
+        type: string
+    type: object
+  dto.CreatePrismInput:
+    properties:
+      configuration:
+        $ref: '#/definitions/json.PrismConfig'
+      name:
+        type: string
+    required:
+    - configuration
+    - name
+    type: object
+  dto.CreatePrismResponse:
+    properties:
+      configuration:
+        $ref: '#/definitions/dto.CreatePrismEnrichedConfig'
+      createdAt:
+        type: string
+      id:
+        type: integer
+      name:
         type: string
     type: object
   dto.CreateUserCommunicationServiceInput:
@@ -56,12 +124,32 @@ definitions:
       value:
         type: string
     type: object
+  dto.GetFacetEnrichedConfig:
+    properties:
+      items:
+        items:
+          $ref: '#/definitions/dto.GetFacetEnrichedConfigItem'
+        type: array
+    type: object
+  dto.GetFacetEnrichedConfigItem:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      service:
+        $ref: '#/definitions/enum.CommunicationService'
+      status:
+        $ref: '#/definitions/enum.FacetStatus'
+      value:
+        type: string
+    type: object
   dto.GetFacetResponseItem:
     properties:
       color:
         type: string
       configuration:
-        $ref: '#/definitions/json.FacetConfig'
+        $ref: '#/definitions/dto.GetFacetEnrichedConfig'
       createdAt:
         type: string
       id:
@@ -104,6 +192,52 @@ definitions:
       id:
         type: string
       lastName:
+        type: string
+    type: object
+  dto.UpdateFacetEnrichedConfig:
+    properties:
+      items:
+        items:
+          $ref: '#/definitions/dto.UpdateFacetEnrichedConfigItem'
+        type: array
+    type: object
+  dto.UpdateFacetEnrichedConfigItem:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      service:
+        $ref: '#/definitions/enum.CommunicationService'
+      status:
+        $ref: '#/definitions/enum.FacetStatus'
+      value:
+        type: string
+    type: object
+  dto.UpdateFacetInput:
+    properties:
+      color:
+        type: string
+      configuration:
+        $ref: '#/definitions/json.FacetConfig'
+      privateLabel:
+        type: string
+      publicLabel:
+        type: string
+    type: object
+  dto.UpdateFacetResponse:
+    properties:
+      color:
+        type: string
+      configuration:
+        $ref: '#/definitions/dto.UpdateFacetEnrichedConfig'
+      createdAt:
+        type: string
+      id:
+        type: integer
+      privateLabel:
+        type: string
+      publicLabel:
         type: string
     type: object
   dto.UpdateUserCommunicationServiceInput:
@@ -171,6 +305,22 @@ definitions:
       status:
         $ref: '#/definitions/enum.FacetStatus'
     type: object
+  json.PrismConfig:
+    properties:
+      base:
+        type: integer
+      users:
+        items:
+          $ref: '#/definitions/json.PrismConfigUserItem'
+        type: array
+    type: object
+  json.PrismConfigUserItem:
+    properties:
+      facetId:
+        type: integer
+      userId:
+        type: string
+    type: object
 host: localhost:8080
 info:
   contact: {}
@@ -236,6 +386,115 @@ paths:
       summary: Create facet
       tags:
       - Facets
+  /api/facets/{facetId}:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes a facet
+      parameters:
+      - description: Facet ID
+        in: path
+        name: facetId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/error.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/error.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/error.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Delete facet
+      tags:
+      - Facets
+    patch:
+      consumes:
+      - application/json
+      description: Updates a facet
+      parameters:
+      - description: Facet ID
+        in: path
+        name: facetId
+        required: true
+        type: integer
+      - description: Facet
+        in: body
+        name: facet
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdateFacetInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.UpdateFacetResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/error.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/error.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/error.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Update facet
+      tags:
+      - Facets
+  /api/prisms:
+    post:
+      consumes:
+      - application/json
+      description: Creates a new prism
+      parameters:
+      - description: Prism
+        in: body
+        name: prism
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreatePrismInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.CreatePrismResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/error.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/error.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/error.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Create prism
+      tags:
+      - Prisms
   /api/users:
     get:
       consumes:

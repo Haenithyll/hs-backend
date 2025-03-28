@@ -32,11 +32,17 @@ func (h *GetFacetsHandler) Handle(c *gin.Context) {
 
 	userId := uuid.MustParse(c.MustGet("user_id").(string))
 
-	facets, err := repo.FindByUserId(userId)
+	facets, err := repo.FindManyByUserId(userId)
 	if err != nil {
 		handler.InternalError(c, "Failed to get facets: "+err.Error())
 		return
 	}
 
-	handler.OK(c, dto.ToGetFacetsResponse(facets))
+	userCommunicationServiceRepo := repository.NewUserCommunicationServiceRepository(h.Deps.DB)
+	userCommunicationServices, err := userCommunicationServiceRepo.FindManyByUserId(userId)
+	if err != nil {
+		handler.InternalError(c, "Failed to find user communication services")
+		return
+	}
+	handler.OK(c, dto.ToGetFacetsResponse(facets, userCommunicationServices))
 }

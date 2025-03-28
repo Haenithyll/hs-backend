@@ -8,14 +8,13 @@ import (
 )
 
 type UserCommunicationServiceRepository interface {
-	FindByUserId(userId uuid.UUID) ([]model.UserCommunicationService, error)
-	FindByIDAndUserID(id uint8, userID uuid.UUID) (*model.UserCommunicationService, error)
-	FindIDsByUserId(userId uuid.UUID) ([]uint8, error)
+	FindManyByUserId(userId uuid.UUID) ([]model.UserCommunicationService, error)
+	FindOneByIDAndUserID(id uint8, userId uuid.UUID) (*model.UserCommunicationService, error)
 
-	Create(ucs *model.UserCommunicationService) error
-	Update(ucs *model.UserCommunicationService) error
+	CreateOne(ucs *model.UserCommunicationService) error
+	UpdateOne(ucs *model.UserCommunicationService) error
 
-	DeleteByIDAndUserID(id uint8, userID uuid.UUID) error
+	DeleteOneByIDAndUserID(id uint8, userId uuid.UUID) error
 }
 
 type userCommunicationServiceRepository struct {
@@ -26,7 +25,7 @@ func NewUserCommunicationServiceRepository(db *gorm.DB) UserCommunicationService
 	return &userCommunicationServiceRepository{db}
 }
 
-func (r *userCommunicationServiceRepository) FindByUserId(userId uuid.UUID) ([]model.UserCommunicationService, error) {
+func (r *userCommunicationServiceRepository) FindManyByUserId(userId uuid.UUID) ([]model.UserCommunicationService, error) {
 	var ucsList []model.UserCommunicationService
 	if err := r.db.
 		Model(&model.UserCommunicationService{}).
@@ -37,33 +36,22 @@ func (r *userCommunicationServiceRepository) FindByUserId(userId uuid.UUID) ([]m
 	return ucsList, nil
 }
 
-func (r *userCommunicationServiceRepository) FindByIDAndUserID(id uint8, userID uuid.UUID) (*model.UserCommunicationService, error) {
+func (r *userCommunicationServiceRepository) FindOneByIDAndUserID(id uint8, userId uuid.UUID) (*model.UserCommunicationService, error) {
 	var ucs model.UserCommunicationService
-	if err := r.db.First(&ucs, "id = ? AND user_id = ?", id, userID).Error; err != nil {
+	if err := r.db.First(&ucs, "id = ? AND user_id = ?", id, userId).Error; err != nil {
 		return nil, err
 	}
 	return &ucs, nil
 }
 
-func (r *userCommunicationServiceRepository) FindIDsByUserId(userId uuid.UUID) ([]uint8, error) {
-	var ids []uint8
-	if err := r.db.
-		Model(&model.UserCommunicationService{}).
-		Where("user_id = ?", userId).
-		Pluck("id", &ids).Error; err != nil {
-		return nil, err
-	}
-	return ids, nil
-}
-
-func (r *userCommunicationServiceRepository) Create(ucs *model.UserCommunicationService) error {
+func (r *userCommunicationServiceRepository) CreateOne(ucs *model.UserCommunicationService) error {
 	if err := r.db.Create(ucs).Error; err != nil {
 		return err
 	}
 	return nil
 }
 
-func (r *userCommunicationServiceRepository) Update(ucs *model.UserCommunicationService) error {
+func (r *userCommunicationServiceRepository) UpdateOne(ucs *model.UserCommunicationService) error {
 	return r.db.
 		Model(&model.UserCommunicationService{}).
 		Where("id = ? AND user_id = ?", ucs.ID, ucs.UserId).
@@ -74,8 +62,8 @@ func (r *userCommunicationServiceRepository) Update(ucs *model.UserCommunication
 		}).Error
 }
 
-func (r *userCommunicationServiceRepository) DeleteByIDAndUserID(id uint8, userID uuid.UUID) error {
-	result := r.db.Where("id = ? AND user_id = ?", id, userID).Delete(&model.UserCommunicationService{})
+func (r *userCommunicationServiceRepository) DeleteOneByIDAndUserID(id uint8, userId uuid.UUID) error {
+	result := r.db.Where("id = ? AND user_id = ?", id, userId).Delete(&model.UserCommunicationService{})
 	if result.Error != nil {
 		return result.Error
 	}

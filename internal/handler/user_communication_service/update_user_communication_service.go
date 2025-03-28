@@ -52,7 +52,7 @@ func (h *UpdateUserCommunicationServiceHandler) Handle(c *gin.Context) {
 
 	userCommunicationServiceRepo := repository.NewUserCommunicationServiceRepository(h.Deps.DB)
 
-	ucs, err := userCommunicationServiceRepo.FindByIDAndUserID(input.UserCommunicationServiceID, userId)
+	ucs, err := userCommunicationServiceRepo.FindOneByIDAndUserID(input.UserCommunicationServiceID, userId)
 	if err != nil {
 		handler.NotFound(c, "User communication service not found")
 		return
@@ -68,7 +68,7 @@ func (h *UpdateUserCommunicationServiceHandler) Handle(c *gin.Context) {
 		ucs.Service = *input.Service
 	}
 
-	err = userCommunicationServiceRepo.Update(ucs)
+	err = userCommunicationServiceRepo.UpdateOne(ucs)
 	if err != nil {
 		handler.InternalError(c, "Failed to update user communication service: "+err.Error())
 		return

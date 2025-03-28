@@ -22,7 +22,7 @@ func (fc *FacetConfig) Scan(value any) error {
 	if !ok {
 		return fmt.Errorf("failed to scan FacetConfig: %v", value)
 	}
-	return json.Unmarshal(bytes, fc) // note: unmarshalling into `fc` itself
+	return json.Unmarshal(bytes, fc)
 }
 
 func (fc FacetConfig) Value() (driver.Value, error) {
