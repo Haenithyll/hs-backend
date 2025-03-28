@@ -9,7 +9,7 @@ type FacetStatus string
 
 const (
 	Available     FacetStatus = "available"
-	EmergencyOnly FacetStatus = "emergency-only"
+	EmergencyOnly FacetStatus = "emergencyOnly"
 )
 
 func (fs FacetStatus) IsValid() bool {

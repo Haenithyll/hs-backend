@@ -264,12 +264,12 @@ definitions:
     type: object
   enum.CommunicationService:
     enum:
-    - face-to-face
+    - faceToFace
     - phone
     - message
     - email
     - discord
-    - microsoft-teams
+    - microsoftTeams
     type: string
     x-enum-varnames:
     - FaceToFace
@@ -281,7 +281,7 @@ definitions:
   enum.FacetStatus:
     enum:
     - available
-    - emergency-only
+    - emergencyOnly
     type: string
     x-enum-varnames:
     - Available

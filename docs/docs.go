@@ -963,12 +963,12 @@ const docTemplate = `{
         "enum.CommunicationService": {
             "type": "string",
             "enum": [
-                "face-to-face",
+                "faceToFace",
                 "phone",
                 "message",
                 "email",
                 "discord",
-                "microsoft-teams"
+                "microsoftTeams"
             ],
             "x-enum-varnames": [
                 "FaceToFace",
@@ -983,7 +983,7 @@ const docTemplate = `{
             "type": "string",
             "enum": [
                 "available",
-                "emergency-only"
+                "emergencyOnly"
             ],
             "x-enum-varnames": [
                 "Available",

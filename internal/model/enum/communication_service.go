@@ -8,12 +8,12 @@ import (
 type CommunicationService string
 
 const (
-	FaceToFace     CommunicationService = "face-to-face"
+	FaceToFace     CommunicationService = "faceToFace"
 	Phone          CommunicationService = "phone"
 	Message        CommunicationService = "message"
 	Email          CommunicationService = "email"
 	Discord        CommunicationService = "discord"
-	MicrosoftTeams CommunicationService = "microsoft-teams"
+	MicrosoftTeams CommunicationService = "microsoftTeams"
 )
 
 func (cs CommunicationService) IsValid() bool {
