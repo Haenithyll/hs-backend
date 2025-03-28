@@ -10,11 +10,12 @@ import (
 )
 
 type GetFacetsHandler struct {
-	Deps *handler.HandlerDeps
+	FacetRepository                    repository.FacetRepository
+	UserCommunicationServiceRepository repository.UserCommunicationServiceRepository
 }
 
-func NewGetFacetsHandler(deps *handler.HandlerDeps) *GetFacetsHandler {
-	return &GetFacetsHandler{deps}
+func NewGetFacetsHandler(facetRepository repository.FacetRepository, userCommunicationServiceRepository repository.UserCommunicationServiceRepository) *GetFacetsHandler {
+	return &GetFacetsHandler{facetRepository, userCommunicationServiceRepository}
 }
 
 // GetFacetsHandler godoc
@@ -28,18 +29,18 @@ func NewGetFacetsHandler(deps *handler.HandlerDeps) *GetFacetsHandler {
 // @Failure 500 {object} error.ErrorResponse
 // @Router /api/facets [get]
 func (h *GetFacetsHandler) Handle(c *gin.Context) {
-	repo := repository.NewFacetRepository(h.Deps.DB)
+	facetRepository := h.FacetRepository
+	userCommunicationServiceRepository := h.UserCommunicationServiceRepository
 
 	userId := uuid.MustParse(c.MustGet("user_id").(string))
 
-	facets, err := repo.FindManyByUserId(userId)
+	facets, err := facetRepository.FindManyByUserId(userId)
 	if err != nil {
 		handler.InternalError(c, "Failed to get facets: "+err.Error())
 		return
 	}
 
-	userCommunicationServiceRepo := repository.NewUserCommunicationServiceRepository(h.Deps.DB)
-	userCommunicationServices, err := userCommunicationServiceRepo.FindManyByUserId(userId)
+	userCommunicationServices, err := userCommunicationServiceRepository.FindManyByUserId(userId)
 	if err != nil {
 		handler.InternalError(c, "Failed to find user communication services")
 		return

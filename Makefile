@@ -8,7 +8,7 @@ SWAG_DIR=docs
 
 # Commands
 
-.PHONY: all docs clean-docs run
+.PHONY: all docs clean-docs run test coverage coverage-html
 
 all: run
 
@@ -42,3 +42,16 @@ check:
 	go mod tidy
 	golangci-lint run --fix
 	@echo "✅ Check passed."
+
+
+test:
+	go test ./... -v
+
+coverage:
+	mkdir -p reports
+	go test ./... -coverprofile=reports/coverage.out
+	@echo "✅ Coverage report generated."
+
+coverage-html:
+	go tool cover -html=reports/coverage.out
+	@echo "✅ Coverage report generated."

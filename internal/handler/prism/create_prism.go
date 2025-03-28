@@ -14,11 +14,12 @@ import (
 )
 
 type CreatePrismHandler struct {
-	Deps *handler.HandlerDeps
+	FacetRepository repository.FacetRepository
+	PrismRepository repository.PrismRepository
 }
 
-func NewCreatePrismHandler(deps *handler.HandlerDeps) *CreatePrismHandler {
-	return &CreatePrismHandler{deps}
+func NewCreatePrismHandler(facetRepository repository.FacetRepository, prismRepository repository.PrismRepository) *CreatePrismHandler {
+	return &CreatePrismHandler{facetRepository, prismRepository}
 }
 
 // CreatePrismHandler godoc
@@ -35,6 +36,9 @@ func NewCreatePrismHandler(deps *handler.HandlerDeps) *CreatePrismHandler {
 // @Failure 500 {object} error.ErrorResponse
 // @Router /api/prisms [post]
 func (h *CreatePrismHandler) Handle(c *gin.Context) {
+	facetRepository := h.FacetRepository
+	prismRepository := h.PrismRepository
+
 	var input dto.CreatePrismInput
 
 	if err := c.ShouldBind(&input); err != nil {
@@ -44,8 +48,7 @@ func (h *CreatePrismHandler) Handle(c *gin.Context) {
 
 	userId := uuid.MustParse(c.MustGet("user_id").(string))
 
-	facetRepo := repository.NewFacetRepository(h.Deps.DB)
-	facets, err := facetRepo.FindManyByUserId(userId)
+	facets, err := facetRepository.FindManyByUserId(userId)
 	if err != nil {
 		handler.InternalError(c, "Failed to find facets")
 		return
@@ -68,15 +71,13 @@ func (h *CreatePrismHandler) Handle(c *gin.Context) {
 		}
 	}
 
-	prismRepo := repository.NewPrismRepository(h.Deps.DB)
-
 	prism := model.Prism{
 		Name:          input.Name,
 		Configuration: input.Configuration,
 		UserId:        userId,
 	}
 
-	err = prismRepo.CreateOne(&prism)
+	err = prismRepository.CreateOne(&prism)
 	if err != nil {
 		handler.InternalError(c, "Failed to create prism: "+err.Error())
 		return

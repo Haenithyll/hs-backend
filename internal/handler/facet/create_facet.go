@@ -14,11 +14,12 @@ import (
 )
 
 type CreateFacetHandler struct {
-	Deps *handler.HandlerDeps
+	FacetRepository                    repository.FacetRepository
+	UserCommunicationServiceRepository repository.UserCommunicationServiceRepository
 }
 
-func NewCreateFacetHandler(deps *handler.HandlerDeps) *CreateFacetHandler {
-	return &CreateFacetHandler{deps}
+func NewCreateFacetHandler(facetRepository repository.FacetRepository, userCommunicationServiceRepository repository.UserCommunicationServiceRepository) *CreateFacetHandler {
+	return &CreateFacetHandler{facetRepository, userCommunicationServiceRepository}
 }
 
 // CreateFacetHandler godoc
@@ -35,6 +36,9 @@ func NewCreateFacetHandler(deps *handler.HandlerDeps) *CreateFacetHandler {
 // @Failure 500 {object} error.ErrorResponse
 // @Router /api/facets [post]
 func (h *CreateFacetHandler) Handle(c *gin.Context) {
+	facetRepository := h.FacetRepository
+	userCommunicationServiceRepository := h.UserCommunicationServiceRepository
+
 	var input dto.CreateFacetInput
 
 	if err := c.ShouldBind(&input); err != nil {
@@ -49,8 +53,7 @@ func (h *CreateFacetHandler) Handle(c *gin.Context) {
 
 	userId := uuid.MustParse(c.MustGet("user_id").(string))
 
-	userCommunicationServiceRepo := repository.NewUserCommunicationServiceRepository(h.Deps.DB)
-	userCommunicationServices, err := userCommunicationServiceRepo.FindManyByUserId(userId)
+	userCommunicationServices, err := userCommunicationServiceRepository.FindManyByUserId(userId)
 	if err != nil {
 		handler.InternalError(c, "Failed to find user communication services")
 		return
@@ -68,8 +71,6 @@ func (h *CreateFacetHandler) Handle(c *gin.Context) {
 		}
 	}
 
-	repo := repository.NewFacetRepository(h.Deps.DB)
-
 	facet := model.Facet{
 		Color:         input.Color,
 		PublicLabel:   input.PublicLabel,
@@ -78,7 +79,7 @@ func (h *CreateFacetHandler) Handle(c *gin.Context) {
 		UserId:        userId,
 	}
 
-	err = repo.CreateOne(&facet)
+	err = facetRepository.CreateOne(&facet)
 	if err != nil {
 		handler.InternalError(c, "Failed to create facet: "+err.Error())
 		return

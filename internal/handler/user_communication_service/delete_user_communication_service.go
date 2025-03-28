@@ -14,11 +14,12 @@ import (
 )
 
 type DeleteUserCommunicationServiceHandler struct {
-	Deps *handler.HandlerDeps
+	FacetRepository                    repository.FacetRepository
+	UserCommunicationServiceRepository repository.UserCommunicationServiceRepository
 }
 
-func NewDeleteUserCommunicationServiceHandler(deps *handler.HandlerDeps) *DeleteUserCommunicationServiceHandler {
-	return &DeleteUserCommunicationServiceHandler{deps}
+func NewDeleteUserCommunicationServiceHandler(facetRepository repository.FacetRepository, userCommunicationServiceRepository repository.UserCommunicationServiceRepository) *DeleteUserCommunicationServiceHandler {
+	return &DeleteUserCommunicationServiceHandler{facetRepository, userCommunicationServiceRepository}
 }
 
 // DeleteUserCommunicationServiceHandler godoc
@@ -35,6 +36,9 @@ func NewDeleteUserCommunicationServiceHandler(deps *handler.HandlerDeps) *Delete
 // @Failure 500 {object} error.ErrorResponse
 // @Router /api/users/communication-services/{userCommunicationServiceId} [delete]
 func (h *DeleteUserCommunicationServiceHandler) Handle(c *gin.Context) {
+	facetRepository := h.FacetRepository
+	userCommunicationServiceRepository := h.UserCommunicationServiceRepository
+
 	var input dto.DeleteUserCommunicationServiceInput
 
 	if err := c.ShouldBindUri(&input); err != nil {
@@ -42,10 +46,8 @@ func (h *DeleteUserCommunicationServiceHandler) Handle(c *gin.Context) {
 		return
 	}
 
-	ucsRepo := repository.NewUserCommunicationServiceRepository(h.Deps.DB)
-
 	userId := uuid.MustParse(c.MustGet("user_id").(string))
-	if err := ucsRepo.DeleteOneByIDAndUserID(input.UserCommunicationServiceID, userId); err != nil {
+	if err := userCommunicationServiceRepository.DeleteOneByIDAndUserID(input.UserCommunicationServiceID, userId); err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			handler.NotFound(c, "User communication service not found")
 			return
@@ -54,9 +56,7 @@ func (h *DeleteUserCommunicationServiceHandler) Handle(c *gin.Context) {
 		return
 	}
 
-	facetRepo := repository.NewFacetRepository(h.Deps.DB)
-
-	if err := facetRepo.RemoveUserCommunicationServiceFromFacets(input.UserCommunicationServiceID); err != nil {
+	if err := facetRepository.RemoveUserCommunicationServiceFromFacets(input.UserCommunicationServiceID); err != nil {
 		handler.InternalError(c, "Failed to apply user communication service deletion to existing facets: "+err.Error())
 		return
 	}

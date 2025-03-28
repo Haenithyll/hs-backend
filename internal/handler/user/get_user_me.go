@@ -10,11 +10,11 @@ import (
 )
 
 type GetUserMeHandler struct {
-	Deps *handler.HandlerDeps
+	UserRepository repository.UserRepository
 }
 
-func NewGetUserMeHandler(deps *handler.HandlerDeps) *GetUserMeHandler {
-	return &GetUserMeHandler{deps}
+func NewGetUserMeHandler(userRepository repository.UserRepository) *GetUserMeHandler {
+	return &GetUserMeHandler{userRepository}
 }
 
 // GetUserMeHandler godoc
@@ -28,11 +28,11 @@ func NewGetUserMeHandler(deps *handler.HandlerDeps) *GetUserMeHandler {
 // @Failure 500 {object} error.ErrorResponse
 // @Router /api/users/me [get]
 func (h *GetUserMeHandler) Handle(c *gin.Context) {
-	repo := repository.NewUserRepository(h.Deps.DB)
+	userRepository := h.UserRepository
 
 	userId := uuid.MustParse(c.MustGet("user_id").(string))
 
-	user, err := repo.FindOneById(userId)
+	user, err := userRepository.FindOneById(userId)
 	if err != nil {
 		handler.InternalError(c, "Failed to get user: "+err.Error())
 		return

@@ -14,11 +14,11 @@ import (
 )
 
 type CreateUserCommunicationServiceHandler struct {
-	Deps *handler.HandlerDeps
+	UserCommunicationServiceRepository repository.UserCommunicationServiceRepository
 }
 
-func NewCreateUserCommunicationServiceHandler(deps *handler.HandlerDeps) *CreateUserCommunicationServiceHandler {
-	return &CreateUserCommunicationServiceHandler{deps}
+func NewCreateUserCommunicationServiceHandler(userCommunicationServiceRepository repository.UserCommunicationServiceRepository) *CreateUserCommunicationServiceHandler {
+	return &CreateUserCommunicationServiceHandler{userCommunicationServiceRepository}
 }
 
 // CreateUserCommunicationServiceHandler godoc
@@ -34,6 +34,8 @@ func NewCreateUserCommunicationServiceHandler(deps *handler.HandlerDeps) *Create
 // @Failure 500 {object} error.ErrorResponse
 // @Router /api/users/communication-services [post]
 func (h *CreateUserCommunicationServiceHandler) Handle(c *gin.Context) {
+	userCommunicationServiceRepository := h.UserCommunicationServiceRepository
+
 	var input dto.CreateUserCommunicationServiceInput
 
 	if err := c.ShouldBind(&input); err != nil {
@@ -48,8 +50,6 @@ func (h *CreateUserCommunicationServiceHandler) Handle(c *gin.Context) {
 
 	userId := uuid.MustParse(c.MustGet("user_id").(string))
 
-	userCommunicationServiceRepo := repository.NewUserCommunicationServiceRepository(h.Deps.DB)
-
 	ucs := model.UserCommunicationService{
 		UserId:  userId,
 		Name:    input.Name,
@@ -57,7 +57,7 @@ func (h *CreateUserCommunicationServiceHandler) Handle(c *gin.Context) {
 		Service: enum.CommunicationService(input.Service),
 	}
 
-	err := userCommunicationServiceRepo.CreateOne(&ucs)
+	err := userCommunicationServiceRepository.CreateOne(&ucs)
 	if err != nil {
 		handler.InternalError(c, "Failed to create user communication service: "+err.Error())
 		return

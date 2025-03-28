@@ -11,11 +11,12 @@ import (
 )
 
 type UpdateFacetHandler struct {
-	Deps *handler.HandlerDeps
+	FacetRepository                    repository.FacetRepository
+	UserCommunicationServiceRepository repository.UserCommunicationServiceRepository
 }
 
-func NewUpdateFacetHandler(deps *handler.HandlerDeps) *UpdateFacetHandler {
-	return &UpdateFacetHandler{deps}
+func NewUpdateFacetHandler(facetRepository repository.FacetRepository, userCommunicationServiceRepository repository.UserCommunicationServiceRepository) *UpdateFacetHandler {
+	return &UpdateFacetHandler{facetRepository, userCommunicationServiceRepository}
 }
 
 // UpdateFacetHandler godoc
@@ -33,6 +34,9 @@ func NewUpdateFacetHandler(deps *handler.HandlerDeps) *UpdateFacetHandler {
 // @Failure 500 {object} error.ErrorResponse
 // @Router /api/facets/{facetId} [patch]
 func (h *UpdateFacetHandler) Handle(c *gin.Context) {
+	facetRepository := h.FacetRepository
+	userCommunicationServiceRepository := h.UserCommunicationServiceRepository
+
 	var input dto.UpdateFacetInput
 
 	if err := c.ShouldBindUri(&input); err != nil {
@@ -52,8 +56,7 @@ func (h *UpdateFacetHandler) Handle(c *gin.Context) {
 
 	userId := uuid.MustParse(c.MustGet("user_id").(string))
 
-	userCommunicationServiceRepo := repository.NewUserCommunicationServiceRepository(h.Deps.DB)
-	userCommunicationServices, err := userCommunicationServiceRepo.FindManyByUserId(userId)
+	userCommunicationServices, err := userCommunicationServiceRepository.FindManyByUserId(userId)
 	if err != nil {
 		handler.InternalError(c, "Failed to find user communication services")
 		return
@@ -71,9 +74,7 @@ func (h *UpdateFacetHandler) Handle(c *gin.Context) {
 		}
 	}
 
-	facetRepo := repository.NewFacetRepository(h.Deps.DB)
-
-	facet, err := facetRepo.FindOneByIDAndUserID(input.FacetID, userId)
+	facet, err := facetRepository.FindOneByIDAndUserID(input.FacetID, userId)
 	if err != nil {
 		handler.NotFound(c, "Facet not found")
 		return
@@ -92,7 +93,7 @@ func (h *UpdateFacetHandler) Handle(c *gin.Context) {
 		facet.Configuration = *input.Configuration
 	}
 
-	err = facetRepo.UpdateOne(facet)
+	err = facetRepository.UpdateOne(facet)
 	if err != nil {
 		handler.InternalError(c, "Failed to update facet: "+err.Error())
 		return

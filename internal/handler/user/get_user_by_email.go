@@ -5,18 +5,17 @@ import (
 
 	dto "hs-backend/internal/dto/user"
 	"hs-backend/internal/error"
-	"hs-backend/internal/handler"
 	"hs-backend/internal/repository"
 
 	"github.com/gin-gonic/gin"
 )
 
 type GetUserByEmailHandler struct {
-	Deps *handler.HandlerDeps
+	UserRepository repository.UserRepository
 }
 
-func NewGetUserByEmailHandler(deps *handler.HandlerDeps) *GetUserByEmailHandler {
-	return &GetUserByEmailHandler{deps}
+func NewGetUserByEmailHandler(userRepository repository.UserRepository) *GetUserByEmailHandler {
+	return &GetUserByEmailHandler{userRepository}
 }
 
 // GetUserByEmailHandler godoc
@@ -39,9 +38,9 @@ func (h *GetUserByEmailHandler) Handle(c *gin.Context) {
 		return
 	}
 
-	repo := repository.NewUserRepository(h.Deps.DB)
+	userRepository := h.UserRepository
 
-	u, err := repo.FindOneByEmail(input.Email)
+	u, err := userRepository.FindOneByEmail(input.Email)
 	if err != nil {
 		c.JSON(http.StatusNotFound, error.ErrorResponse{Error: "User not found"})
 		return

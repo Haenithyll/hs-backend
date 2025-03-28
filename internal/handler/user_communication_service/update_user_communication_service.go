@@ -10,11 +10,11 @@ import (
 )
 
 type UpdateUserCommunicationServiceHandler struct {
-	Deps *handler.HandlerDeps
+	UserCommunicationServiceRepository repository.UserCommunicationServiceRepository
 }
 
-func NewUpdateUserCommunicationServiceHandler(deps *handler.HandlerDeps) *UpdateUserCommunicationServiceHandler {
-	return &UpdateUserCommunicationServiceHandler{deps}
+func NewUpdateUserCommunicationServiceHandler(userCommunicationServiceRepository repository.UserCommunicationServiceRepository) *UpdateUserCommunicationServiceHandler {
+	return &UpdateUserCommunicationServiceHandler{userCommunicationServiceRepository}
 }
 
 // UpdateUserCommunicationServiceHandler godoc
@@ -31,6 +31,8 @@ func NewUpdateUserCommunicationServiceHandler(deps *handler.HandlerDeps) *Update
 // @Failure 500 {object} error.ErrorResponse
 // @Router /api/users/communication-services/{userCommunicationServiceId} [patch]
 func (h *UpdateUserCommunicationServiceHandler) Handle(c *gin.Context) {
+	userCommunicationServiceRepository := h.UserCommunicationServiceRepository
+
 	var input dto.UpdateUserCommunicationServiceInput
 
 	if err := c.ShouldBindUri(&input); err != nil {
@@ -50,9 +52,7 @@ func (h *UpdateUserCommunicationServiceHandler) Handle(c *gin.Context) {
 
 	userId := uuid.MustParse(c.MustGet("user_id").(string))
 
-	userCommunicationServiceRepo := repository.NewUserCommunicationServiceRepository(h.Deps.DB)
-
-	ucs, err := userCommunicationServiceRepo.FindOneByIDAndUserID(input.UserCommunicationServiceID, userId)
+	ucs, err := userCommunicationServiceRepository.FindOneByIDAndUserID(input.UserCommunicationServiceID, userId)
 	if err != nil {
 		handler.NotFound(c, "User communication service not found")
 		return
@@ -68,7 +68,7 @@ func (h *UpdateUserCommunicationServiceHandler) Handle(c *gin.Context) {
 		ucs.Service = *input.Service
 	}
 
-	err = userCommunicationServiceRepo.UpdateOne(ucs)
+	err = userCommunicationServiceRepository.UpdateOne(ucs)
 	if err != nil {
 		handler.InternalError(c, "Failed to update user communication service: "+err.Error())
 		return

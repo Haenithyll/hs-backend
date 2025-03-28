@@ -10,11 +10,11 @@ import (
 )
 
 type GetUserCommunicationServiceHandler struct {
-	Deps *handler.HandlerDeps
+	UserCommunicationServiceRepository repository.UserCommunicationServiceRepository
 }
 
-func NewGetUserCommunicationServiceHandler(deps *handler.HandlerDeps) *GetUserCommunicationServiceHandler {
-	return &GetUserCommunicationServiceHandler{deps}
+func NewGetUserCommunicationServiceHandler(userCommunicationServiceRepository repository.UserCommunicationServiceRepository) *GetUserCommunicationServiceHandler {
+	return &GetUserCommunicationServiceHandler{userCommunicationServiceRepository}
 }
 
 // GetUserCommunicationServiceHandler godoc
@@ -28,11 +28,11 @@ func NewGetUserCommunicationServiceHandler(deps *handler.HandlerDeps) *GetUserCo
 // @Failure 500 {object} error.ErrorResponse
 // @Router /api/users/communication-services [get]
 func (h *GetUserCommunicationServiceHandler) Handle(c *gin.Context) {
-	repo := repository.NewUserCommunicationServiceRepository(h.Deps.DB)
+	userCommunicationServiceRepository := h.UserCommunicationServiceRepository
 
 	userId := uuid.MustParse(c.MustGet("user_id").(string))
 
-	ucsList, err := repo.FindManyByUserId(userId)
+	ucsList, err := userCommunicationServiceRepository.FindManyByUserId(userId)
 	if err != nil {
 		handler.InternalError(c, "Failed to get user communication services: "+err.Error())
 		return

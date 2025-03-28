@@ -14,11 +14,11 @@ import (
 )
 
 type DeleteFacetHandler struct {
-	Deps *handler.HandlerDeps
+	FacetRepository repository.FacetRepository
 }
 
-func NewDeleteFacetHandler(deps *handler.HandlerDeps) *DeleteFacetHandler {
-	return &DeleteFacetHandler{deps}
+func NewDeleteFacetHandler(facetRepository repository.FacetRepository) *DeleteFacetHandler {
+	return &DeleteFacetHandler{facetRepository}
 }
 
 // DeleteFacetHandler godoc
@@ -35,6 +35,8 @@ func NewDeleteFacetHandler(deps *handler.HandlerDeps) *DeleteFacetHandler {
 // @Failure 500 {object} error.ErrorResponse
 // @Router /api/facets/{facetId} [delete]
 func (h *DeleteFacetHandler) Handle(c *gin.Context) {
+	facetRepository := h.FacetRepository
+
 	var input dto.DeleteFacetInput
 
 	if err := c.ShouldBindUri(&input); err != nil {
@@ -42,10 +44,8 @@ func (h *DeleteFacetHandler) Handle(c *gin.Context) {
 		return
 	}
 
-	repo := repository.NewFacetRepository(h.Deps.DB)
-
 	userId := uuid.MustParse(c.MustGet("user_id").(string))
-	if err := repo.DeleteOneByIDAndUserID(input.FacetID, userId); err != nil {
+	if err := facetRepository.DeleteOneByIDAndUserID(input.FacetID, userId); err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			handler.NotFound(c, "Facet not found")
 			return
