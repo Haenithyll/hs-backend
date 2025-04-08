@@ -1,7 +1,6 @@
 // @title HS Backend API
 // @version 1.0
 // @description This is the backend API for the HS project
-// @host localhost:8080
 // @securityDefinitions.apikey BearerAuth
 // @in header
 // @name Authorization
