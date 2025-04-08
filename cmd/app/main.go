@@ -40,7 +40,8 @@ func main() {
 		log.Fatalf("Failed to set trusted proxies: %v", err)
 	}
 
-	if config.GetEnv("ENV", "development") == "development" {
+	env := config.GetEnvOrPanic("ENV")
+	if env == "local" || env == "develop" {
 		r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	}
 	route.RegisterRoutes(r, db)

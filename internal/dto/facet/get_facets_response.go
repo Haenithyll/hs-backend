@@ -6,12 +6,16 @@ import (
 	"time"
 )
 
-type GetFacetEnrichedConfigItem struct {
+type GetFacetEnrichedConfigItemCommunicationService struct {
 	Id      uint8                     `json:"id"`
-	Status  enum.FacetStatus          `json:"status"`
 	Name    string                    `json:"name"`
 	Value   string                    `json:"value"`
 	Service enum.CommunicationService `json:"service"`
+}
+
+type GetFacetEnrichedConfigItem struct {
+	CommunicationService GetFacetEnrichedConfigItemCommunicationService `json:"communicationService"`
+	Status               enum.FacetStatus                               `json:"status"`
 }
 
 type GetFacetEnrichedConfig struct {
@@ -39,11 +43,13 @@ func ToGetFacetsResponse(facets []model.Facet, communicationServices []model.Use
 			for _, cs := range communicationServices {
 				if cs.ID == configItem.Id {
 					enrichedItems[configItemIndex] = GetFacetEnrichedConfigItem{
-						Id:      configItem.Id,
-						Status:  configItem.Status,
-						Name:    cs.Name,
-						Value:   cs.Value,
-						Service: cs.Service,
+						CommunicationService: GetFacetEnrichedConfigItemCommunicationService{
+							Id:      cs.ID,
+							Name:    cs.Name,
+							Value:   cs.Value,
+							Service: cs.Service,
+						},
+						Status: configItem.Status,
 					}
 				}
 			}

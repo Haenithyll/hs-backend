@@ -8,14 +8,19 @@ definitions:
     type: object
   dto.CreateFacetEnrichedConfigItem:
     properties:
+      communicationService:
+        $ref: '#/definitions/dto.CreateFacetEnrichedConfigItemCommunicationService'
+      status:
+        $ref: '#/definitions/enum.FacetStatus'
+    type: object
+  dto.CreateFacetEnrichedConfigItemCommunicationService:
+    properties:
       id:
         type: integer
       name:
         type: string
       service:
         $ref: '#/definitions/enum.CommunicationService'
-      status:
-        $ref: '#/definitions/enum.FacetStatus'
       value:
         type: string
     type: object
@@ -133,14 +138,19 @@ definitions:
     type: object
   dto.GetFacetEnrichedConfigItem:
     properties:
+      communicationService:
+        $ref: '#/definitions/dto.GetFacetEnrichedConfigItemCommunicationService'
+      status:
+        $ref: '#/definitions/enum.FacetStatus'
+    type: object
+  dto.GetFacetEnrichedConfigItemCommunicationService:
+    properties:
       id:
         type: integer
       name:
         type: string
       service:
         $ref: '#/definitions/enum.CommunicationService'
-      status:
-        $ref: '#/definitions/enum.FacetStatus'
       value:
         type: string
     type: object
@@ -241,14 +251,19 @@ definitions:
     type: object
   dto.UpdateFacetEnrichedConfigItem:
     properties:
+      communicationService:
+        $ref: '#/definitions/dto.UpdateFacetEnrichedConfigItemCommunicationService'
+      status:
+        $ref: '#/definitions/enum.FacetStatus'
+    type: object
+  dto.UpdateFacetEnrichedConfigItemCommunicationService:
+    properties:
       id:
         type: integer
       name:
         type: string
       service:
         $ref: '#/definitions/enum.CommunicationService'
-      status:
-        $ref: '#/definitions/enum.FacetStatus'
       value:
         type: string
     type: object

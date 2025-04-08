@@ -809,6 +809,17 @@ const docTemplate = `{
         "dto.CreateFacetEnrichedConfigItem": {
             "type": "object",
             "properties": {
+                "communicationService": {
+                    "$ref": "#/definitions/dto.CreateFacetEnrichedConfigItemCommunicationService"
+                },
+                "status": {
+                    "$ref": "#/definitions/enum.FacetStatus"
+                }
+            }
+        },
+        "dto.CreateFacetEnrichedConfigItemCommunicationService": {
+            "type": "object",
+            "properties": {
                 "id": {
                     "type": "integer"
                 },
@@ -817,9 +828,6 @@ const docTemplate = `{
                 },
                 "service": {
                     "$ref": "#/definitions/enum.CommunicationService"
-                },
-                "status": {
-                    "$ref": "#/definitions/enum.FacetStatus"
                 },
                 "value": {
                     "type": "string"
@@ -999,6 +1007,17 @@ const docTemplate = `{
         "dto.GetFacetEnrichedConfigItem": {
             "type": "object",
             "properties": {
+                "communicationService": {
+                    "$ref": "#/definitions/dto.GetFacetEnrichedConfigItemCommunicationService"
+                },
+                "status": {
+                    "$ref": "#/definitions/enum.FacetStatus"
+                }
+            }
+        },
+        "dto.GetFacetEnrichedConfigItemCommunicationService": {
+            "type": "object",
+            "properties": {
                 "id": {
                     "type": "integer"
                 },
@@ -1007,9 +1026,6 @@ const docTemplate = `{
                 },
                 "service": {
                     "$ref": "#/definitions/enum.CommunicationService"
-                },
-                "status": {
-                    "$ref": "#/definitions/enum.FacetStatus"
                 },
                 "value": {
                     "type": "string"
@@ -1166,6 +1182,17 @@ const docTemplate = `{
         "dto.UpdateFacetEnrichedConfigItem": {
             "type": "object",
             "properties": {
+                "communicationService": {
+                    "$ref": "#/definitions/dto.UpdateFacetEnrichedConfigItemCommunicationService"
+                },
+                "status": {
+                    "$ref": "#/definitions/enum.FacetStatus"
+                }
+            }
+        },
+        "dto.UpdateFacetEnrichedConfigItemCommunicationService": {
+            "type": "object",
+            "properties": {
                 "id": {
                     "type": "integer"
                 },
@@ -1174,9 +1201,6 @@ const docTemplate = `{
                 },
                 "service": {
                     "$ref": "#/definitions/enum.CommunicationService"
-                },
-                "status": {
-                    "$ref": "#/definitions/enum.FacetStatus"
                 },
                 "value": {
                     "type": "string"
