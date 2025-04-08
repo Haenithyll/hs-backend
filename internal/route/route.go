@@ -15,6 +15,7 @@ func RegisterRoutes(r *gin.Engine, db *gorm.DB) {
 
 	RegisterFacetRoutes(authenticated, db)
 	RegisterPrismRoutes(authenticated, db)
+	RegisterRefractedFacetRoutes(authenticated, db)
 	RegisterUserRoutes(authenticated, db)
 	RegisterUserCommunicationServiceRoutes(authenticated, db)
 }

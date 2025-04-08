@@ -17,7 +17,9 @@ type DeleteFacetHandler struct {
 	FacetRepository repository.FacetRepository
 }
 
-func NewDeleteFacetHandler(facetRepository repository.FacetRepository) *DeleteFacetHandler {
+func NewDeleteFacetHandler(
+	facetRepository repository.FacetRepository,
+) *DeleteFacetHandler {
 	return &DeleteFacetHandler{facetRepository}
 }
 

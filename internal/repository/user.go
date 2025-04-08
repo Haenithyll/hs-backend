@@ -8,6 +8,7 @@ import (
 )
 
 type UserRepository interface {
+	FindAll() ([]model.User, error)
 	FindOneById(id uuid.UUID) (*model.User, error)
 	FindOneByEmail(email string) (*model.User, error)
 }
@@ -18,6 +19,14 @@ type userRepository struct {
 
 func NewUserRepository(db *gorm.DB) UserRepository {
 	return &userRepository{db}
+}
+
+func (r *userRepository) FindAll() ([]model.User, error) {
+	var users []model.User
+	if err := r.db.Find(&users).Error; err != nil {
+		return nil, err
+	}
+	return users, nil
 }
 
 func (r *userRepository) FindOneById(id uuid.UUID) (*model.User, error) {

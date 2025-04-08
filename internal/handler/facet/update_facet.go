@@ -15,7 +15,10 @@ type UpdateFacetHandler struct {
 	UserCommunicationServiceRepository repository.UserCommunicationServiceRepository
 }
 
-func NewUpdateFacetHandler(facetRepository repository.FacetRepository, userCommunicationServiceRepository repository.UserCommunicationServiceRepository) *UpdateFacetHandler {
+func NewUpdateFacetHandler(
+	facetRepository repository.FacetRepository,
+	userCommunicationServiceRepository repository.UserCommunicationServiceRepository,
+) *UpdateFacetHandler {
 	return &UpdateFacetHandler{facetRepository, userCommunicationServiceRepository}
 }
 

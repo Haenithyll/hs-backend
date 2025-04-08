@@ -18,7 +18,10 @@ type CreateFacetHandler struct {
 	UserCommunicationServiceRepository repository.UserCommunicationServiceRepository
 }
 
-func NewCreateFacetHandler(facetRepository repository.FacetRepository, userCommunicationServiceRepository repository.UserCommunicationServiceRepository) *CreateFacetHandler {
+func NewCreateFacetHandler(
+	facetRepository repository.FacetRepository,
+	userCommunicationServiceRepository repository.UserCommunicationServiceRepository,
+) *CreateFacetHandler {
 	return &CreateFacetHandler{facetRepository, userCommunicationServiceRepository}
 }
 

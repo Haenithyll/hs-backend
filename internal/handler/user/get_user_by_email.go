@@ -14,7 +14,9 @@ type GetUserByEmailHandler struct {
 	UserRepository repository.UserRepository
 }
 
-func NewGetUserByEmailHandler(userRepository repository.UserRepository) *GetUserByEmailHandler {
+func NewGetUserByEmailHandler(
+	userRepository repository.UserRepository,
+) *GetUserByEmailHandler {
 	return &GetUserByEmailHandler{userRepository}
 }
 

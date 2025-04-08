@@ -13,7 +13,9 @@ type UpdateUserCommunicationServiceHandler struct {
 	UserCommunicationServiceRepository repository.UserCommunicationServiceRepository
 }
 
-func NewUpdateUserCommunicationServiceHandler(userCommunicationServiceRepository repository.UserCommunicationServiceRepository) *UpdateUserCommunicationServiceHandler {
+func NewUpdateUserCommunicationServiceHandler(
+	userCommunicationServiceRepository repository.UserCommunicationServiceRepository,
+) *UpdateUserCommunicationServiceHandler {
 	return &UpdateUserCommunicationServiceHandler{userCommunicationServiceRepository}
 }
 

@@ -19,7 +19,7 @@ type GetFacetEnrichedConfig struct {
 }
 
 type GetFacetResponseItem struct {
-	ID            uint8                   `json:"id"`
+	ID            uint8                  `json:"id"`
 	Color         string                 `json:"color"`
 	PublicLabel   string                 `json:"publicLabel"`
 	PrivateLabel  string                 `json:"privateLabel"`

@@ -55,7 +55,7 @@ func (r *prismRepository) UpdateOne(prism *model.Prism) error {
 	return r.db.
 		Model(&model.Prism{}).
 		Where("id = ? AND user_id = ?", prism.ID, prism.UserId).
-		Updates(map[string]interface{}{
+		Updates(map[string]any{
 			"name":          prism.Name,
 			"configuration": prism.Configuration,
 		}).Error

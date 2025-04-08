@@ -13,7 +13,9 @@ type GetUserMeHandler struct {
 	UserRepository repository.UserRepository
 }
 
-func NewGetUserMeHandler(userRepository repository.UserRepository) *GetUserMeHandler {
+func NewGetUserMeHandler(
+	userRepository repository.UserRepository,
+) *GetUserMeHandler {
 	return &GetUserMeHandler{userRepository}
 }
 

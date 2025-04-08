@@ -9,6 +9,7 @@ import (
 
 type FacetRepository interface {
 	FindManyByUserId(userId uuid.UUID) ([]model.Facet, error)
+	FindManyRefractedByIds(ids []uint8) ([]model.Facet, error)
 	FindOneByIDAndUserID(id uint8, userId uuid.UUID) (*model.Facet, error)
 
 	CreateOne(facet *model.Facet) error
@@ -30,6 +31,14 @@ func NewFacetRepository(db *gorm.DB) FacetRepository {
 func (r *facetRepository) FindManyByUserId(userId uuid.UUID) ([]model.Facet, error) {
 	var facets []model.Facet
 	if err := r.db.Where("user_id = ?", userId).Find(&facets).Error; err != nil {
+		return nil, err
+	}
+	return facets, nil
+}
+
+func (r *facetRepository) FindManyRefractedByIds(ids []uint8) ([]model.Facet, error) {
+	var facets []model.Facet
+	if err := r.db.Where("id IN ?", ids).Select("id", "public_label", "color").Find(&facets).Error; err != nil {
 		return nil, err
 	}
 	return facets, nil

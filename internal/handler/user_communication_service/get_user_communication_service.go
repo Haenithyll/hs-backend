@@ -13,7 +13,9 @@ type GetUserCommunicationServiceHandler struct {
 	UserCommunicationServiceRepository repository.UserCommunicationServiceRepository
 }
 
-func NewGetUserCommunicationServiceHandler(userCommunicationServiceRepository repository.UserCommunicationServiceRepository) *GetUserCommunicationServiceHandler {
+func NewGetUserCommunicationServiceHandler(
+	userCommunicationServiceRepository repository.UserCommunicationServiceRepository,
+) *GetUserCommunicationServiceHandler {
 	return &GetUserCommunicationServiceHandler{userCommunicationServiceRepository}
 }
 

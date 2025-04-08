@@ -18,7 +18,10 @@ type DeleteUserCommunicationServiceHandler struct {
 	UserCommunicationServiceRepository repository.UserCommunicationServiceRepository
 }
 
-func NewDeleteUserCommunicationServiceHandler(facetRepository repository.FacetRepository, userCommunicationServiceRepository repository.UserCommunicationServiceRepository) *DeleteUserCommunicationServiceHandler {
+func NewDeleteUserCommunicationServiceHandler(
+	facetRepository repository.FacetRepository,
+	userCommunicationServiceRepository repository.UserCommunicationServiceRepository,
+) *DeleteUserCommunicationServiceHandler {
 	return &DeleteUserCommunicationServiceHandler{facetRepository, userCommunicationServiceRepository}
 }
 

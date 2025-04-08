@@ -17,7 +17,9 @@ type CreateUserCommunicationServiceHandler struct {
 	UserCommunicationServiceRepository repository.UserCommunicationServiceRepository
 }
 
-func NewCreateUserCommunicationServiceHandler(userCommunicationServiceRepository repository.UserCommunicationServiceRepository) *CreateUserCommunicationServiceHandler {
+func NewCreateUserCommunicationServiceHandler(
+	userCommunicationServiceRepository repository.UserCommunicationServiceRepository,
+) *CreateUserCommunicationServiceHandler {
 	return &CreateUserCommunicationServiceHandler{userCommunicationServiceRepository}
 }
 

@@ -14,7 +14,10 @@ type GetFacetsHandler struct {
 	UserCommunicationServiceRepository repository.UserCommunicationServiceRepository
 }
 
-func NewGetFacetsHandler(facetRepository repository.FacetRepository, userCommunicationServiceRepository repository.UserCommunicationServiceRepository) *GetFacetsHandler {
+func NewGetFacetsHandler(
+	facetRepository repository.FacetRepository,
+	userCommunicationServiceRepository repository.UserCommunicationServiceRepository,
+) *GetFacetsHandler {
 	return &GetFacetsHandler{facetRepository, userCommunicationServiceRepository}
 }
 

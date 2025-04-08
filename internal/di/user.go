@@ -18,4 +18,3 @@ func InitializeGetUserByEmailHandler(db *gorm.DB) *user.GetUserByEmailHandler {
 	getUserByEmailHandler := user.NewGetUserByEmailHandler(userRepository)
 	return getUserByEmailHandler
 }
-

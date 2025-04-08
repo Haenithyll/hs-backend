@@ -222,6 +222,41 @@ const docTemplate = `{
             }
         },
         "/api/prisms": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Returns prisms",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Prisms"
+                ],
+                "summary": "Get prisms",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/dto.GetPrismResponseItem"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/error.ErrorResponse"
+                        }
+                    }
+                }
+            },
             "post": {
                 "security": [
                     {
@@ -267,6 +302,209 @@ const docTemplate = `{
                         "description": "Not Found",
                         "schema": {
                             "$ref": "#/definitions/error.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/error.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/prisms/{prismId}": {
+            "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Deletes a prism",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Prisms"
+                ],
+                "summary": "Delete prism",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Prism ID",
+                        "name": "prismId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/error.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/error.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/error.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Updates a prism",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Prisms"
+                ],
+                "summary": "Update prism",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Prism ID",
+                        "name": "prismId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Prism",
+                        "name": "prism",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.UpdatePrismInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.UpdatePrismResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/error.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/error.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/error.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/prisms/{prismId}/activate": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Activates a prism",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Prisms"
+                ],
+                "summary": "Activate prism",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Prism ID",
+                        "name": "prismId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/error.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/error.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/error.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/refracted-facets": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Returns refracted facets",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Refracted Facets"
+                ],
+                "summary": "Get refracted facets",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/types.RefractedUserFacet"
+                            }
                         }
                     },
                     "500": {
@@ -801,6 +1039,65 @@ const docTemplate = `{
                 }
             }
         },
+        "dto.GetPrismEnrichedConfig": {
+            "type": "object",
+            "properties": {
+                "base": {
+                    "$ref": "#/definitions/dto.GetPrismFacet"
+                },
+                "users": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.GetPrismEnrichedUserItem"
+                    }
+                }
+            }
+        },
+        "dto.GetPrismEnrichedUserItem": {
+            "type": "object",
+            "properties": {
+                "facet": {
+                    "$ref": "#/definitions/dto.GetPrismFacet"
+                },
+                "userId": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.GetPrismFacet": {
+            "type": "object",
+            "properties": {
+                "color": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "privateLabel": {
+                    "type": "string"
+                },
+                "publicLabel": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.GetPrismResponseItem": {
+            "type": "object",
+            "properties": {
+                "configuration": {
+                    "$ref": "#/definitions/dto.GetPrismEnrichedConfig"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
         "dto.GetUserByEmailResponse": {
             "type": "object",
             "properties": {
@@ -926,6 +1223,76 @@ const docTemplate = `{
                 }
             }
         },
+        "dto.UpdatePrismEnrichedConfig": {
+            "type": "object",
+            "properties": {
+                "base": {
+                    "$ref": "#/definitions/dto.UpdatePrismFacet"
+                },
+                "users": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.UpdatePrismEnrichedUserItem"
+                    }
+                }
+            }
+        },
+        "dto.UpdatePrismEnrichedUserItem": {
+            "type": "object",
+            "properties": {
+                "facet": {
+                    "$ref": "#/definitions/dto.UpdatePrismFacet"
+                },
+                "userId": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.UpdatePrismFacet": {
+            "type": "object",
+            "properties": {
+                "color": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "privateLabel": {
+                    "type": "string"
+                },
+                "publicLabel": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.UpdatePrismInput": {
+            "type": "object",
+            "properties": {
+                "configuration": {
+                    "$ref": "#/definitions/json.PrismConfig"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.UpdatePrismResponse": {
+            "type": "object",
+            "properties": {
+                "configuration": {
+                    "$ref": "#/definitions/dto.UpdatePrismEnrichedConfig"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
         "dto.UpdateUserCommunicationServiceInput": {
             "type": "object",
             "properties": {
@@ -1042,6 +1409,55 @@ const docTemplate = `{
                 },
                 "userId": {
                     "type": "string"
+                }
+            }
+        },
+        "model.User": {
+            "type": "object",
+            "properties": {
+                "avatarURL": {
+                    "description": "nullable",
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "firstName": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "lastName": {
+                    "type": "string"
+                }
+            }
+        },
+        "types.RefractedFacet": {
+            "type": "object",
+            "properties": {
+                "color": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "label": {
+                    "type": "string"
+                },
+                "lastUpdatedAt": {
+                    "type": "string"
+                }
+            }
+        },
+        "types.RefractedUserFacet": {
+            "type": "object",
+            "properties": {
+                "refractedFacet": {
+                    "$ref": "#/definitions/types.RefractedFacet"
+                },
+                "user": {
+                    "$ref": "#/definitions/model.User"
                 }
             }
         }

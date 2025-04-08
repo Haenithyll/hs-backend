@@ -32,6 +32,7 @@ func main() {
 	httpLog := config.GetEnv("HTTP_LOG", "false") == "true"
 
 	r := gin.Default()
+	gin.SetMode(gin.ReleaseMode)
 	if httpLog {
 		r.Use(middleware.LoggerMiddleware())
 	}

@@ -159,6 +159,44 @@ definitions:
       publicLabel:
         type: string
     type: object
+  dto.GetPrismEnrichedConfig:
+    properties:
+      base:
+        $ref: '#/definitions/dto.GetPrismFacet'
+      users:
+        items:
+          $ref: '#/definitions/dto.GetPrismEnrichedUserItem'
+        type: array
+    type: object
+  dto.GetPrismEnrichedUserItem:
+    properties:
+      facet:
+        $ref: '#/definitions/dto.GetPrismFacet'
+      userId:
+        type: string
+    type: object
+  dto.GetPrismFacet:
+    properties:
+      color:
+        type: string
+      id:
+        type: integer
+      privateLabel:
+        type: string
+      publicLabel:
+        type: string
+    type: object
+  dto.GetPrismResponseItem:
+    properties:
+      configuration:
+        $ref: '#/definitions/dto.GetPrismEnrichedConfig'
+      createdAt:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
   dto.GetUserByEmailResponse:
     properties:
       avatarUrl:
@@ -238,6 +276,51 @@ definitions:
       privateLabel:
         type: string
       publicLabel:
+        type: string
+    type: object
+  dto.UpdatePrismEnrichedConfig:
+    properties:
+      base:
+        $ref: '#/definitions/dto.UpdatePrismFacet'
+      users:
+        items:
+          $ref: '#/definitions/dto.UpdatePrismEnrichedUserItem'
+        type: array
+    type: object
+  dto.UpdatePrismEnrichedUserItem:
+    properties:
+      facet:
+        $ref: '#/definitions/dto.UpdatePrismFacet'
+      userId:
+        type: string
+    type: object
+  dto.UpdatePrismFacet:
+    properties:
+      color:
+        type: string
+      id:
+        type: integer
+      privateLabel:
+        type: string
+      publicLabel:
+        type: string
+    type: object
+  dto.UpdatePrismInput:
+    properties:
+      configuration:
+        $ref: '#/definitions/json.PrismConfig'
+      name:
+        type: string
+    type: object
+  dto.UpdatePrismResponse:
+    properties:
+      configuration:
+        $ref: '#/definitions/dto.UpdatePrismEnrichedConfig'
+      createdAt:
+        type: string
+      id:
+        type: integer
+      name:
         type: string
     type: object
   dto.UpdateUserCommunicationServiceInput:
@@ -320,6 +403,38 @@ definitions:
         type: integer
       userId:
         type: string
+    type: object
+  model.User:
+    properties:
+      avatarURL:
+        description: nullable
+        type: string
+      email:
+        type: string
+      firstName:
+        type: string
+      id:
+        type: string
+      lastName:
+        type: string
+    type: object
+  types.RefractedFacet:
+    properties:
+      color:
+        type: string
+      id:
+        type: integer
+      label:
+        type: string
+      lastUpdatedAt:
+        type: string
+    type: object
+  types.RefractedUserFacet:
+    properties:
+      refractedFacet:
+        $ref: '#/definitions/types.RefractedFacet'
+      user:
+        $ref: '#/definitions/model.User'
     type: object
 host: localhost:8080
 info:
@@ -460,6 +575,28 @@ paths:
       tags:
       - Facets
   /api/prisms:
+    get:
+      consumes:
+      - application/json
+      description: Returns prisms
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/dto.GetPrismResponseItem'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/error.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get prisms
+      tags:
+      - Prisms
     post:
       consumes:
       - application/json
@@ -495,6 +632,135 @@ paths:
       summary: Create prism
       tags:
       - Prisms
+  /api/prisms/{prismId}:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes a prism
+      parameters:
+      - description: Prism ID
+        in: path
+        name: prismId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/error.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/error.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/error.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Delete prism
+      tags:
+      - Prisms
+    patch:
+      consumes:
+      - application/json
+      description: Updates a prism
+      parameters:
+      - description: Prism ID
+        in: path
+        name: prismId
+        required: true
+        type: integer
+      - description: Prism
+        in: body
+        name: prism
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdatePrismInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.UpdatePrismResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/error.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/error.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/error.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Update prism
+      tags:
+      - Prisms
+  /api/prisms/{prismId}/activate:
+    post:
+      consumes:
+      - application/json
+      description: Activates a prism
+      parameters:
+      - description: Prism ID
+        in: path
+        name: prismId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/error.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/error.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/error.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Activate prism
+      tags:
+      - Prisms
+  /api/refracted-facets:
+    get:
+      consumes:
+      - application/json
+      description: Returns refracted facets
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/types.RefractedUserFacet'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/error.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get refracted facets
+      tags:
+      - Refracted Facets
   /api/users:
     get:
       consumes:
