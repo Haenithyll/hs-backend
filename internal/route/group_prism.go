@@ -8,12 +8,13 @@ import (
 )
 
 func RegisterPrismRoutes(rg *gin.RouterGroup, db *gorm.DB) {
+	prismHandler := di.InitializePrismHandler(db)
+
 	prisms := rg.Group("/prisms")
 	{
-		prisms.GET("", di.InitializeGetPrismsHandler(db).Handle)
-		prisms.POST("", di.InitializeCreatePrismHandler(db).Handle)
-		prisms.POST("/:prismId/activate", di.InitializeActivatePrismHandler(db).Handle)
-		prisms.PATCH("/:prismId", di.InitializeUpdatePrismHandler(db).Handle)
-		prisms.DELETE("/:prismId", di.InitializeDeletePrismHandler(db).Handle)
+		prisms.GET("", prismHandler.GetAll)
+		prisms.POST("", prismHandler.Create)
+		prisms.PATCH("/:prismId", prismHandler.Update)
+		prisms.DELETE("/:prismId", prismHandler.Delete)
 	}
 }

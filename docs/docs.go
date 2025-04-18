@@ -39,14 +39,14 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/dto.GetFacetResponseItem"
+                                "$ref": "#/definitions/response.FacetResponse"
                             }
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/error.ErrorResponse"
+                            "$ref": "#/definitions/domain.ErrorResponse"
                         }
                     }
                 }
@@ -75,7 +75,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/dto.CreateFacetInput"
+                            "$ref": "#/definitions/request.CreateFacetRequest"
                         }
                     }
                 ],
@@ -83,25 +83,25 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/dto.CreateFacetResponse"
+                            "$ref": "#/definitions/response.FacetResponse"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/error.ErrorResponse"
+                            "$ref": "#/definitions/domain.ErrorResponse"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/error.ErrorResponse"
+                            "$ref": "#/definitions/domain.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/error.ErrorResponse"
+                            "$ref": "#/definitions/domain.ErrorResponse"
                         }
                     }
                 }
@@ -141,19 +141,19 @@ const docTemplate = `{
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/error.ErrorResponse"
+                            "$ref": "#/definitions/domain.ErrorResponse"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/error.ErrorResponse"
+                            "$ref": "#/definitions/domain.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/error.ErrorResponse"
+                            "$ref": "#/definitions/domain.ErrorResponse"
                         }
                     }
                 }
@@ -189,7 +189,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/dto.UpdateFacetInput"
+                            "$ref": "#/definitions/request.UpdateFacetRequest"
                         }
                     }
                 ],
@@ -197,25 +197,25 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/dto.UpdateFacetResponse"
+                            "$ref": "#/definitions/response.FacetResponse"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/error.ErrorResponse"
+                            "$ref": "#/definitions/domain.ErrorResponse"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/error.ErrorResponse"
+                            "$ref": "#/definitions/domain.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/error.ErrorResponse"
+                            "$ref": "#/definitions/domain.ErrorResponse"
                         }
                     }
                 }
@@ -245,14 +245,14 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/dto.GetPrismResponseItem"
+                                "$ref": "#/definitions/response.PrismResponse"
                             }
                         }
                     },
-                    "500": {
-                        "description": "Internal Server Error",
+                    "400": {
+                        "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/error.ErrorResponse"
+                            "$ref": "#/definitions/domain.ErrorResponse"
                         }
                     }
                 }
@@ -281,7 +281,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/dto.CreatePrismInput"
+                            "$ref": "#/definitions/request.CreatePrismRequest"
                         }
                     }
                 ],
@@ -289,25 +289,25 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/dto.CreatePrismResponse"
+                            "$ref": "#/definitions/response.PrismResponse"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/error.ErrorResponse"
+                            "$ref": "#/definitions/domain.ErrorResponse"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/error.ErrorResponse"
+                            "$ref": "#/definitions/domain.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/error.ErrorResponse"
+                            "$ref": "#/definitions/domain.ErrorResponse"
                         }
                     }
                 }
@@ -347,19 +347,19 @@ const docTemplate = `{
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/error.ErrorResponse"
+                            "$ref": "#/definitions/domain.ErrorResponse"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/error.ErrorResponse"
+                            "$ref": "#/definitions/domain.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/error.ErrorResponse"
+                            "$ref": "#/definitions/domain.ErrorResponse"
                         }
                     }
                 }
@@ -395,7 +395,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/dto.UpdatePrismInput"
+                            "$ref": "#/definitions/request.UpdatePrismRequest"
                         }
                     }
                 ],
@@ -403,25 +403,25 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/dto.UpdatePrismResponse"
+                            "$ref": "#/definitions/response.PrismResponse"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/error.ErrorResponse"
+                            "$ref": "#/definitions/domain.ErrorResponse"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/error.ErrorResponse"
+                            "$ref": "#/definitions/domain.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/error.ErrorResponse"
+                            "$ref": "#/definitions/domain.ErrorResponse"
                         }
                     }
                 }
@@ -461,105 +461,19 @@ const docTemplate = `{
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/error.ErrorResponse"
+                            "$ref": "#/definitions/domain.ErrorResponse"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/error.ErrorResponse"
+                            "$ref": "#/definitions/domain.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/error.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/refracted-facets": {
-            "get": {
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ],
-                "description": "Returns refracted facets",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Refracted Facets"
-                ],
-                "summary": "Get refracted facets",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/types.RefractedUserFacet"
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/error.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/users": {
-            "get": {
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ],
-                "description": "Returns user info by email query param",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Users"
-                ],
-                "summary": "Get user by email",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Email address",
-                        "name": "email",
-                        "in": "query",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/dto.GetUserByEmailResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/error.ErrorResponse"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/error.ErrorResponse"
+                            "$ref": "#/definitions/domain.ErrorResponse"
                         }
                     }
                 }
@@ -589,14 +503,14 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/dto.GetUserCommunicationServicesResponseItem"
+                                "$ref": "#/definitions/response.UserCommunicationServiceResponse"
                             }
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/error.ErrorResponse"
+                            "$ref": "#/definitions/domain.ErrorResponse"
                         }
                     }
                 }
@@ -625,7 +539,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/dto.CreateUserCommunicationServiceInput"
+                            "$ref": "#/definitions/request.CreateUserCommunicationServiceRequest"
                         }
                     }
                 ],
@@ -633,19 +547,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/dto.CreateUserCommunicationServiceResponse"
+                            "$ref": "#/definitions/response.UserCommunicationServiceResponse"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/error.ErrorResponse"
+                            "$ref": "#/definitions/domain.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/error.ErrorResponse"
+                            "$ref": "#/definitions/domain.ErrorResponse"
                         }
                     }
                 }
@@ -685,19 +599,19 @@ const docTemplate = `{
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/error.ErrorResponse"
+                            "$ref": "#/definitions/domain.ErrorResponse"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/error.ErrorResponse"
+                            "$ref": "#/definitions/domain.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/error.ErrorResponse"
+                            "$ref": "#/definitions/domain.ErrorResponse"
                         }
                     }
                 }
@@ -733,7 +647,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/dto.UpdateUserCommunicationServiceInput"
+                            "$ref": "#/definitions/request.UpdateUserCommunicationServiceRequest"
                         }
                     }
                 ],
@@ -741,19 +655,68 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/dto.UpdateUserCommunicationServiceResponse"
+                            "$ref": "#/definitions/response.UserCommunicationServiceResponse"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/error.ErrorResponse"
+                            "$ref": "#/definitions/domain.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/error.ErrorResponse"
+                            "$ref": "#/definitions/domain.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/users/email/{email}": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Returns user info by email query param",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Get user by email",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Email address",
+                        "name": "email",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.UserResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/domain.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/domain.ErrorResponse"
                         }
                     }
                 }
@@ -781,13 +744,13 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/dto.GetUserMeResponse"
+                            "$ref": "#/definitions/response.UserResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/error.ErrorResponse"
+                            "$ref": "#/definitions/domain.ErrorResponse"
                         }
                     }
                 }
@@ -795,558 +758,10 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "dto.CreateFacetEnrichedConfig": {
+        "domain.ErrorResponse": {
             "type": "object",
             "properties": {
-                "items": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/dto.CreateFacetEnrichedConfigItem"
-                    }
-                }
-            }
-        },
-        "dto.CreateFacetEnrichedConfigItem": {
-            "type": "object",
-            "properties": {
-                "communicationService": {
-                    "$ref": "#/definitions/dto.CreateFacetEnrichedConfigItemCommunicationService"
-                },
-                "status": {
-                    "$ref": "#/definitions/enum.FacetStatus"
-                }
-            }
-        },
-        "dto.CreateFacetEnrichedConfigItemCommunicationService": {
-            "type": "object",
-            "properties": {
-                "id": {
-                    "type": "integer"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "service": {
-                    "$ref": "#/definitions/enum.CommunicationService"
-                },
-                "value": {
-                    "type": "string"
-                }
-            }
-        },
-        "dto.CreateFacetInput": {
-            "type": "object",
-            "required": [
-                "color",
-                "configuration",
-                "privateLabel",
-                "publicLabel"
-            ],
-            "properties": {
-                "color": {
-                    "type": "string"
-                },
-                "configuration": {
-                    "$ref": "#/definitions/json.FacetConfig"
-                },
-                "privateLabel": {
-                    "type": "string"
-                },
-                "publicLabel": {
-                    "type": "string"
-                }
-            }
-        },
-        "dto.CreateFacetResponse": {
-            "type": "object",
-            "properties": {
-                "color": {
-                    "type": "string"
-                },
-                "configuration": {
-                    "$ref": "#/definitions/dto.CreateFacetEnrichedConfig"
-                },
-                "createdAt": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "privateLabel": {
-                    "type": "string"
-                },
-                "publicLabel": {
-                    "type": "string"
-                }
-            }
-        },
-        "dto.CreatePrismEnrichedConfig": {
-            "type": "object",
-            "properties": {
-                "base": {
-                    "$ref": "#/definitions/dto.CreatePrismFacet"
-                },
-                "users": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/dto.CreatePrismEnrichedUserItem"
-                    }
-                }
-            }
-        },
-        "dto.CreatePrismEnrichedUserItem": {
-            "type": "object",
-            "properties": {
-                "facet": {
-                    "$ref": "#/definitions/dto.CreatePrismFacet"
-                },
-                "userId": {
-                    "type": "string"
-                }
-            }
-        },
-        "dto.CreatePrismFacet": {
-            "type": "object",
-            "properties": {
-                "color": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "privateLabel": {
-                    "type": "string"
-                },
-                "publicLabel": {
-                    "type": "string"
-                }
-            }
-        },
-        "dto.CreatePrismInput": {
-            "type": "object",
-            "required": [
-                "configuration",
-                "name"
-            ],
-            "properties": {
-                "configuration": {
-                    "$ref": "#/definitions/json.PrismConfig"
-                },
-                "name": {
-                    "type": "string"
-                }
-            }
-        },
-        "dto.CreatePrismResponse": {
-            "type": "object",
-            "properties": {
-                "configuration": {
-                    "$ref": "#/definitions/dto.CreatePrismEnrichedConfig"
-                },
-                "createdAt": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "name": {
-                    "type": "string"
-                }
-            }
-        },
-        "dto.CreateUserCommunicationServiceInput": {
-            "type": "object",
-            "required": [
-                "name",
-                "service",
-                "value"
-            ],
-            "properties": {
-                "name": {
-                    "type": "string"
-                },
-                "service": {
-                    "$ref": "#/definitions/enum.CommunicationService"
-                },
-                "value": {
-                    "type": "string"
-                }
-            }
-        },
-        "dto.CreateUserCommunicationServiceResponse": {
-            "type": "object",
-            "properties": {
-                "createdAt": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "service": {
-                    "$ref": "#/definitions/enum.CommunicationService"
-                },
-                "value": {
-                    "type": "string"
-                }
-            }
-        },
-        "dto.GetFacetEnrichedConfig": {
-            "type": "object",
-            "properties": {
-                "items": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/dto.GetFacetEnrichedConfigItem"
-                    }
-                }
-            }
-        },
-        "dto.GetFacetEnrichedConfigItem": {
-            "type": "object",
-            "properties": {
-                "communicationService": {
-                    "$ref": "#/definitions/dto.GetFacetEnrichedConfigItemCommunicationService"
-                },
-                "status": {
-                    "$ref": "#/definitions/enum.FacetStatus"
-                }
-            }
-        },
-        "dto.GetFacetEnrichedConfigItemCommunicationService": {
-            "type": "object",
-            "properties": {
-                "id": {
-                    "type": "integer"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "service": {
-                    "$ref": "#/definitions/enum.CommunicationService"
-                },
-                "value": {
-                    "type": "string"
-                }
-            }
-        },
-        "dto.GetFacetResponseItem": {
-            "type": "object",
-            "properties": {
-                "color": {
-                    "type": "string"
-                },
-                "configuration": {
-                    "$ref": "#/definitions/dto.GetFacetEnrichedConfig"
-                },
-                "createdAt": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "privateLabel": {
-                    "type": "string"
-                },
-                "publicLabel": {
-                    "type": "string"
-                }
-            }
-        },
-        "dto.GetPrismEnrichedConfig": {
-            "type": "object",
-            "properties": {
-                "base": {
-                    "$ref": "#/definitions/dto.GetPrismFacet"
-                },
-                "users": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/dto.GetPrismEnrichedUserItem"
-                    }
-                }
-            }
-        },
-        "dto.GetPrismEnrichedUserItem": {
-            "type": "object",
-            "properties": {
-                "facet": {
-                    "$ref": "#/definitions/dto.GetPrismFacet"
-                },
-                "userId": {
-                    "type": "string"
-                }
-            }
-        },
-        "dto.GetPrismFacet": {
-            "type": "object",
-            "properties": {
-                "color": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "privateLabel": {
-                    "type": "string"
-                },
-                "publicLabel": {
-                    "type": "string"
-                }
-            }
-        },
-        "dto.GetPrismResponseItem": {
-            "type": "object",
-            "properties": {
-                "configuration": {
-                    "$ref": "#/definitions/dto.GetPrismEnrichedConfig"
-                },
-                "createdAt": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "name": {
-                    "type": "string"
-                }
-            }
-        },
-        "dto.GetUserByEmailResponse": {
-            "type": "object",
-            "properties": {
-                "avatarUrl": {
-                    "type": "string"
-                },
-                "firstName": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "string"
-                },
-                "lastName": {
-                    "type": "string"
-                }
-            }
-        },
-        "dto.GetUserCommunicationServicesResponseItem": {
-            "type": "object",
-            "properties": {
-                "id": {
-                    "type": "integer"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "service": {
-                    "$ref": "#/definitions/enum.CommunicationService"
-                },
-                "value": {
-                    "type": "string"
-                }
-            }
-        },
-        "dto.GetUserMeResponse": {
-            "type": "object",
-            "properties": {
-                "avatarUrl": {
-                    "type": "string"
-                },
-                "email": {
-                    "type": "string"
-                },
-                "firstName": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "string"
-                },
-                "lastName": {
-                    "type": "string"
-                }
-            }
-        },
-        "dto.UpdateFacetEnrichedConfig": {
-            "type": "object",
-            "properties": {
-                "items": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/dto.UpdateFacetEnrichedConfigItem"
-                    }
-                }
-            }
-        },
-        "dto.UpdateFacetEnrichedConfigItem": {
-            "type": "object",
-            "properties": {
-                "communicationService": {
-                    "$ref": "#/definitions/dto.UpdateFacetEnrichedConfigItemCommunicationService"
-                },
-                "status": {
-                    "$ref": "#/definitions/enum.FacetStatus"
-                }
-            }
-        },
-        "dto.UpdateFacetEnrichedConfigItemCommunicationService": {
-            "type": "object",
-            "properties": {
-                "id": {
-                    "type": "integer"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "service": {
-                    "$ref": "#/definitions/enum.CommunicationService"
-                },
-                "value": {
-                    "type": "string"
-                }
-            }
-        },
-        "dto.UpdateFacetInput": {
-            "type": "object",
-            "properties": {
-                "color": {
-                    "type": "string"
-                },
-                "configuration": {
-                    "$ref": "#/definitions/json.FacetConfig"
-                },
-                "privateLabel": {
-                    "type": "string"
-                },
-                "publicLabel": {
-                    "type": "string"
-                }
-            }
-        },
-        "dto.UpdateFacetResponse": {
-            "type": "object",
-            "properties": {
-                "color": {
-                    "type": "string"
-                },
-                "configuration": {
-                    "$ref": "#/definitions/dto.UpdateFacetEnrichedConfig"
-                },
-                "createdAt": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "privateLabel": {
-                    "type": "string"
-                },
-                "publicLabel": {
-                    "type": "string"
-                }
-            }
-        },
-        "dto.UpdatePrismEnrichedConfig": {
-            "type": "object",
-            "properties": {
-                "base": {
-                    "$ref": "#/definitions/dto.UpdatePrismFacet"
-                },
-                "users": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/dto.UpdatePrismEnrichedUserItem"
-                    }
-                }
-            }
-        },
-        "dto.UpdatePrismEnrichedUserItem": {
-            "type": "object",
-            "properties": {
-                "facet": {
-                    "$ref": "#/definitions/dto.UpdatePrismFacet"
-                },
-                "userId": {
-                    "type": "string"
-                }
-            }
-        },
-        "dto.UpdatePrismFacet": {
-            "type": "object",
-            "properties": {
-                "color": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "privateLabel": {
-                    "type": "string"
-                },
-                "publicLabel": {
-                    "type": "string"
-                }
-            }
-        },
-        "dto.UpdatePrismInput": {
-            "type": "object",
-            "properties": {
-                "configuration": {
-                    "$ref": "#/definitions/json.PrismConfig"
-                },
-                "name": {
-                    "type": "string"
-                }
-            }
-        },
-        "dto.UpdatePrismResponse": {
-            "type": "object",
-            "properties": {
-                "configuration": {
-                    "$ref": "#/definitions/dto.UpdatePrismEnrichedConfig"
-                },
-                "createdAt": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "name": {
-                    "type": "string"
-                }
-            }
-        },
-        "dto.UpdateUserCommunicationServiceInput": {
-            "type": "object",
-            "properties": {
-                "name": {
-                    "type": "string"
-                },
-                "service": {
-                    "$ref": "#/definitions/enum.CommunicationService"
-                },
-                "value": {
-                    "type": "string"
-                }
-            }
-        },
-        "dto.UpdateUserCommunicationServiceResponse": {
-            "type": "object",
-            "properties": {
-                "createdAt": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "service": {
-                    "$ref": "#/definitions/enum.CommunicationService"
-                },
-                "value": {
+                "error": {
                     "type": "string"
                 }
             }
@@ -1380,14 +795,6 @@ const docTemplate = `{
                 "Available",
                 "EmergencyOnly"
             ]
-        },
-        "error.ErrorResponse": {
-            "type": "object",
-            "properties": {
-                "error": {
-                    "type": "string"
-                }
-            }
         },
         "json.FacetConfig": {
             "type": "object",
@@ -1436,14 +843,230 @@ const docTemplate = `{
                 }
             }
         },
-        "model.User": {
+        "request.CreateFacetRequest": {
             "type": "object",
+            "required": [
+                "color",
+                "configuration",
+                "privateLabel",
+                "publicLabel"
+            ],
             "properties": {
-                "avatarURL": {
-                    "description": "nullable",
+                "color": {
                     "type": "string"
                 },
-                "email": {
+                "configuration": {
+                    "$ref": "#/definitions/json.FacetConfig"
+                },
+                "privateLabel": {
+                    "type": "string"
+                },
+                "publicLabel": {
+                    "type": "string"
+                }
+            }
+        },
+        "request.CreatePrismRequest": {
+            "type": "object",
+            "required": [
+                "configuration",
+                "name"
+            ],
+            "properties": {
+                "configuration": {
+                    "$ref": "#/definitions/json.PrismConfig"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "request.CreateUserCommunicationServiceRequest": {
+            "type": "object",
+            "required": [
+                "name",
+                "service",
+                "value"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "service": {
+                    "$ref": "#/definitions/enum.CommunicationService"
+                },
+                "value": {
+                    "type": "string"
+                }
+            }
+        },
+        "request.UpdateFacetRequest": {
+            "type": "object",
+            "properties": {
+                "color": {
+                    "type": "string"
+                },
+                "configuration": {
+                    "$ref": "#/definitions/json.FacetConfig"
+                },
+                "privateLabel": {
+                    "type": "string"
+                },
+                "publicLabel": {
+                    "type": "string"
+                }
+            }
+        },
+        "request.UpdatePrismRequest": {
+            "type": "object",
+            "properties": {
+                "configuration": {
+                    "$ref": "#/definitions/json.PrismConfig"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "request.UpdateUserCommunicationServiceRequest": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "service": {
+                    "$ref": "#/definitions/enum.CommunicationService"
+                },
+                "value": {
+                    "type": "string"
+                }
+            }
+        },
+        "response.FacetResponse": {
+            "type": "object",
+            "properties": {
+                "color": {
+                    "type": "string"
+                },
+                "configuration": {
+                    "$ref": "#/definitions/response.FacetResponseEnrichedConfig"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "privateLabel": {
+                    "type": "string"
+                },
+                "publicLabel": {
+                    "type": "string"
+                }
+            }
+        },
+        "response.FacetResponseEnrichedConfig": {
+            "type": "object",
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/response.FacetResponseEnrichedConfigItem"
+                    }
+                }
+            }
+        },
+        "response.FacetResponseEnrichedConfigItem": {
+            "type": "object",
+            "properties": {
+                "communicationService": {
+                    "$ref": "#/definitions/response.FacetResponseEnrichedConfigItemCommunicationService"
+                },
+                "status": {
+                    "$ref": "#/definitions/enum.FacetStatus"
+                }
+            }
+        },
+        "response.FacetResponseEnrichedConfigItemCommunicationService": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "service": {
+                    "$ref": "#/definitions/enum.CommunicationService"
+                },
+                "value": {
+                    "type": "string"
+                }
+            }
+        },
+        "response.PrismResponse": {
+            "type": "object",
+            "properties": {
+                "configuration": {
+                    "$ref": "#/definitions/response.PrismResponseEnrichedConfig"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "response.PrismResponseEnrichedConfig": {
+            "type": "object",
+            "properties": {
+                "base": {
+                    "$ref": "#/definitions/response.PrismResponseFacet"
+                },
+                "users": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/response.PrismResponseEnrichedUserItem"
+                    }
+                }
+            }
+        },
+        "response.PrismResponseEnrichedUserItem": {
+            "type": "object",
+            "properties": {
+                "facet": {
+                    "$ref": "#/definitions/response.PrismResponseFacet"
+                },
+                "user": {
+                    "$ref": "#/definitions/response.PrismResponseUser"
+                }
+            }
+        },
+        "response.PrismResponseFacet": {
+            "type": "object",
+            "properties": {
+                "color": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "privateLabel": {
+                    "type": "string"
+                },
+                "publicLabel": {
+                    "type": "string"
+                }
+            }
+        },
+        "response.PrismResponseUser": {
+            "type": "object",
+            "properties": {
+                "avatarUrl": {
                     "type": "string"
                 },
                 "firstName": {
@@ -1457,31 +1080,43 @@ const docTemplate = `{
                 }
             }
         },
-        "types.RefractedFacet": {
+        "response.UserCommunicationServiceResponse": {
             "type": "object",
             "properties": {
-                "color": {
+                "createdAt": {
                     "type": "string"
                 },
                 "id": {
                     "type": "integer"
                 },
-                "label": {
+                "name": {
                     "type": "string"
                 },
-                "lastUpdatedAt": {
+                "service": {
+                    "$ref": "#/definitions/enum.CommunicationService"
+                },
+                "value": {
                     "type": "string"
                 }
             }
         },
-        "types.RefractedUserFacet": {
+        "response.UserResponse": {
             "type": "object",
             "properties": {
-                "refractedFacet": {
-                    "$ref": "#/definitions/types.RefractedFacet"
+                "avatarUrl": {
+                    "type": "string"
                 },
-                "user": {
-                    "$ref": "#/definitions/model.User"
+                "email": {
+                    "type": "string"
+                },
+                "firstName": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "lastName": {
+                    "type": "string"
                 }
             }
         }

@@ -9,7 +9,7 @@ import (
 	"github.com/golang-jwt/jwt/v4"
 
 	"hs-backend/internal/config"
-	customError "hs-backend/internal/error"
+	"hs-backend/internal/domain"
 )
 
 func AuthMiddleware() gin.HandlerFunc {
@@ -18,12 +18,12 @@ func AuthMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		authHeader := c.GetHeader("Authorization")
 		if authHeader == "" {
-			c.AbortWithStatusJSON(http.StatusUnauthorized, customError.ErrorResponse{Error: "missing Authorization header"})
+			c.AbortWithStatusJSON(http.StatusUnauthorized, domain.ErrorResponse{Error: "missing Authorization header"})
 			return
 		}
 		parts := strings.Split(authHeader, " ")
 		if len(parts) != 2 || parts[0] != "Bearer" {
-			c.AbortWithStatusJSON(http.StatusUnauthorized, customError.ErrorResponse{Error: "invalid Authorization header format"})
+			c.AbortWithStatusJSON(http.StatusUnauthorized, domain.ErrorResponse{Error: "invalid Authorization header format"})
 			return
 		}
 		tokenString := parts[1]
@@ -35,24 +35,24 @@ func AuthMiddleware() gin.HandlerFunc {
 			return []byte(secretKey), nil
 		})
 		if err != nil {
-			c.AbortWithStatusJSON(http.StatusUnauthorized, customError.ErrorResponse{Error: "invalid token: " + err.Error()})
+			c.AbortWithStatusJSON(http.StatusUnauthorized, domain.ErrorResponse{Error: "invalid token: " + err.Error()})
 			return
 		}
 
 		if !token.Valid {
-			c.AbortWithStatusJSON(http.StatusUnauthorized, customError.ErrorResponse{Error: "invalid token"})
+			c.AbortWithStatusJSON(http.StatusUnauthorized, domain.ErrorResponse{Error: "invalid token"})
 			return
 		}
 
 		claims, ok := token.Claims.(jwt.MapClaims)
 		if !ok {
-			c.AbortWithStatusJSON(http.StatusUnauthorized, customError.ErrorResponse{Error: "invalid token claims"})
+			c.AbortWithStatusJSON(http.StatusUnauthorized, domain.ErrorResponse{Error: "invalid token claims"})
 			return
 		}
 
 		userId, ok := claims["sub"].(string)
 		if !ok {
-			c.AbortWithStatusJSON(http.StatusUnauthorized, customError.ErrorResponse{Error: "invalid token claims"})
+			c.AbortWithStatusJSON(http.StatusUnauthorized, domain.ErrorResponse{Error: "invalid token claims"})
 			return
 		}
 		c.Set("user_id", userId)

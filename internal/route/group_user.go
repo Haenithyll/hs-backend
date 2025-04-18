@@ -8,9 +8,11 @@ import (
 )
 
 func RegisterUserRoutes(rg *gin.RouterGroup, db *gorm.DB) {
+	userHandler := di.InitializeUserHandler(db)
+
 	users := rg.Group("/users")
 	{
-		users.GET("/me", di.InitializeGetUserMeHandler(db).Handle)
-		users.GET("/:userId", di.InitializeGetUserByEmailHandler(db).Handle)
+		users.GET("/me", userHandler.GetUserMe)
+		users.GET("/email/:email", userHandler.GetUserByEmail)
 	}
 }

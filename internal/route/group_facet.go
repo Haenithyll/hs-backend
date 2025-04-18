@@ -8,11 +8,13 @@ import (
 )
 
 func RegisterFacetRoutes(rg *gin.RouterGroup, db *gorm.DB) {
+	facetHandler := di.InitializeFacetHandler(db)
+
 	facets := rg.Group("/facets")
 	{
-		facets.GET("", di.InitializeGetFacetsHandler(db).Handle)
-		facets.POST("", di.InitializeCreateFacetHandler(db).Handle)
-		facets.PATCH(":facetId", di.InitializeUpdateFacetHandler(db).Handle)
-		facets.DELETE(":facetId", di.InitializeDeleteFacetHandler(db).Handle)
+		facets.GET("", facetHandler.GetAll)
+		facets.POST("", facetHandler.Create)
+		facets.PATCH(":facetId", facetHandler.Update)
+		facets.DELETE(":facetId", facetHandler.Delete)
 	}
 }

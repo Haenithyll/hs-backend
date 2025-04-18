@@ -8,11 +8,13 @@ import (
 )
 
 func RegisterUserCommunicationServiceRoutes(rg *gin.RouterGroup, db *gorm.DB) {
+	userCommunicationServiceHandler := di.InitializeUserCommunicationServiceHandler(db)
+
 	userCommunicationServices := rg.Group("/users/communication-services")
 	{
-		userCommunicationServices.GET("", di.InitializeGetUserCommunicationServiceHandler(db).Handle)
-		userCommunicationServices.POST("", di.InitializeCreateUserCommunicationServiceHandler(db).Handle)
-		userCommunicationServices.PATCH(":userCommunicationServiceId", di.InitializeUpdateUserCommunicationServiceHandler(db).Handle)
-		userCommunicationServices.DELETE(":userCommunicationServiceId", di.InitializeDeleteUserCommunicationServiceHandler(db).Handle)
+		userCommunicationServices.GET("", userCommunicationServiceHandler.GetAll)
+		userCommunicationServices.POST("", userCommunicationServiceHandler.Create)
+		userCommunicationServices.PATCH(":userCommunicationServiceId", userCommunicationServiceHandler.Update)
+		userCommunicationServices.DELETE(":userCommunicationServiceId", userCommunicationServiceHandler.Delete)
 	}
 }
