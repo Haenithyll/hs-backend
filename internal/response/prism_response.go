@@ -16,6 +16,7 @@ type PrismResponseFacet struct {
 type PrismResponseUser struct {
 	ID        uuid.UUID `json:"id"`
 	AvatarUrl *string   `json:"avatarUrl"`
+	Email     string    `json:"email"`
 	FirstName string    `json:"firstName"`
 	LastName  string    `json:"lastName"`
 }
