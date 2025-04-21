@@ -41,6 +41,15 @@ func (s *PrismService) GetPrisms(userID uuid.UUID) ([]response.PrismResponse, *d
 		return nil, domain.NewDomainError(domain.ErrInternalServerError, "failed to get prisms: "+err.Error())
 	}
 
+	if len(prisms) == 0 {
+		return []response.PrismResponse{}, nil
+	}
+
+	activePrismId, err := s.UserPrismTrackerRepository.FindOneByUserId(userID)
+	if err != nil {
+		return nil, domain.NewDomainError(domain.ErrInternalServerError, "failed to get active prism: "+err.Error())
+	}
+
 	facets, err := s.getFacetsFromPrismConfigs(prisms, userID)
 	if err != nil {
 		return nil, domain.NewDomainError(domain.ErrInternalServerError, "failed to get facets: "+err.Error())
@@ -54,7 +63,7 @@ func (s *PrismService) GetPrisms(userID uuid.UUID) ([]response.PrismResponse, *d
 	facetMap := map_util.BuildFacetMapById(facets)
 	userMap := map_util.BuildUserMapById(users)
 
-	return mapper.ToPrismResponses(prisms, facetMap, userMap), nil
+	return mapper.ToPrismResponses(prisms, facetMap, userMap, activePrismId), nil
 }
 
 // Creates a new prism for the given user
@@ -89,7 +98,7 @@ func (s *PrismService) CreatePrism(userId uuid.UUID, request request.CreatePrism
 	facetMap := map_util.BuildFacetMapById(facets)
 	userMap := map_util.BuildUserMapById(users)
 
-	response := mapper.ToPrismResponse(newPrism, facetMap, userMap)
+	response := mapper.ToPrismResponse(newPrism, facetMap, userMap, false)
 
 	return &response, nil
 }
@@ -129,10 +138,15 @@ func (s *PrismService) UpdatePrism(userId uuid.UUID, request request.UpdatePrism
 		return nil, domain.NewDomainError(domain.ErrInternalServerError, "failed to get users: "+err.Error())
 	}
 
+	activePrismId, err := s.UserPrismTrackerRepository.FindOneByUserId(userId)
+	if err != nil {
+		return nil, domain.NewDomainError(domain.ErrInternalServerError, "failed to get active prism: "+err.Error())
+	}
+
 	facetMap := map_util.BuildFacetMapById(facets)
 	userMap := map_util.BuildUserMapById(users)
 
-	response := mapper.ToPrismResponse(*prism, facetMap, userMap)
+	response := mapper.ToPrismResponse(*prism, facetMap, userMap, activePrismId != nil && *activePrismId == prism.ID)
 
 	return &response, nil
 }

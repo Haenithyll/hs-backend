@@ -7,17 +7,28 @@ import (
 	"github.com/google/uuid"
 )
 
-func ToPrismResponses(prisms []model.Prism, facetsMap map[uint8]model.Facet, usersMap map[uuid.UUID]model.User) response.PrismResponses {
+func ToPrismResponses(
+	prisms []model.Prism,
+	facetsMap map[uint8]model.Facet,
+	usersMap map[uuid.UUID]model.User,
+	activePrismId *uint8,
+) response.PrismResponses {
 	prismResponses := make([]response.PrismResponse, len(prisms))
 
 	for i, prism := range prisms {
-		prismResponses[i] = ToPrismResponse(prism, facetsMap, usersMap)
+		isActive := activePrismId != nil && *activePrismId == prism.ID
+		prismResponses[i] = ToPrismResponse(prism, facetsMap, usersMap, isActive)
 	}
 
 	return prismResponses
 }
 
-func ToPrismResponse(prism model.Prism, facetsMap map[uint8]model.Facet, usersMap map[uuid.UUID]model.User) response.PrismResponse {
+func ToPrismResponse(
+	prism model.Prism,
+	facetsMap map[uint8]model.Facet,
+	usersMap map[uuid.UUID]model.User,
+	isActive bool,
+) response.PrismResponse {
 	baseFacet := newPrismResponseFacet(facetsMap[prism.Configuration.Base])
 
 	enrichedUserItems := make([]response.PrismResponseEnrichedUserItem, len(prism.Configuration.Users))
@@ -29,15 +40,21 @@ func ToPrismResponse(prism model.Prism, facetsMap map[uint8]model.Facet, usersMa
 		enrichedUserItems[i] = newPrismResponseEnrichedUserItem(user, facet)
 	}
 
-	return newPrismResponse(prism, baseFacet, enrichedUserItems)
+	return newPrismResponse(prism, baseFacet, enrichedUserItems, isActive)
 }
 
-func newPrismResponse(prism model.Prism, baseFacet response.PrismResponseFacet, enrichedUserItems []response.PrismResponseEnrichedUserItem) response.PrismResponse {
+func newPrismResponse(
+	prism model.Prism,
+	baseFacet response.PrismResponseFacet,
+	enrichedUserItems []response.PrismResponseEnrichedUserItem,
+	isActive bool,
+) response.PrismResponse {
 	return response.PrismResponse{
 		ID:            prism.ID,
 		Name:          prism.Name,
 		Configuration: response.PrismResponseEnrichedConfig{Base: baseFacet, Users: enrichedUserItems},
 		CreatedAt:     prism.CreatedAt,
+		IsActive:      isActive,
 	}
 }
 
@@ -54,6 +71,7 @@ func newPrismResponseUser(user model.User) response.PrismResponseUser {
 	return response.PrismResponseUser{
 		ID:        user.ID,
 		AvatarUrl: user.AvatarURL,
+		Email:     user.Email,
 		FirstName: user.FirstName,
 		LastName:  user.LastName,
 	}

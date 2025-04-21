@@ -36,6 +36,7 @@ type PrismResponse struct {
 	Name          string                      `json:"name"`
 	Configuration PrismResponseEnrichedConfig `json:"configuration"`
 	CreatedAt     time.Time                   `json:"createdAt"`
+	IsActive      bool                        `json:"isActive"`
 }
 
 type PrismResponses []PrismResponse

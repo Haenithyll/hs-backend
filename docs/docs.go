@@ -479,6 +479,43 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/refracted-facets": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Returns refracted facets",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Refracted Facets"
+                ],
+                "summary": "Get refracted facets",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/response.RefractedFacetResponse"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/domain.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/api/users/communication-services": {
             "get": {
                 "security": [
@@ -843,6 +880,27 @@ const docTemplate = `{
                 }
             }
         },
+        "model.User": {
+            "type": "object",
+            "properties": {
+                "avatarURL": {
+                    "description": "nullable",
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "firstName": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "lastName": {
+                    "type": "string"
+                }
+            }
+        },
         "request.CreateFacetRequest": {
             "type": "object",
             "required": [
@@ -1016,6 +1074,9 @@ const docTemplate = `{
                 "id": {
                     "type": "integer"
                 },
+                "isActive": {
+                    "type": "boolean"
+                },
                 "name": {
                     "type": "string"
                 }
@@ -1076,6 +1137,76 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "lastName": {
+                    "type": "string"
+                }
+            }
+        },
+        "response.RefractedFacet": {
+            "type": "object",
+            "properties": {
+                "color": {
+                    "type": "string"
+                },
+                "configuration": {
+                    "$ref": "#/definitions/response.RefractedFacetResponseEnrichedConfig"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "label": {
+                    "type": "string"
+                },
+                "lastUpdatedAt": {
+                    "type": "string"
+                }
+            }
+        },
+        "response.RefractedFacetResponse": {
+            "type": "object",
+            "properties": {
+                "refractedFacet": {
+                    "$ref": "#/definitions/response.RefractedFacet"
+                },
+                "user": {
+                    "$ref": "#/definitions/model.User"
+                }
+            }
+        },
+        "response.RefractedFacetResponseEnrichedConfig": {
+            "type": "object",
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/response.RefractedFacetResponseEnrichedConfigItem"
+                    }
+                }
+            }
+        },
+        "response.RefractedFacetResponseEnrichedConfigItem": {
+            "type": "object",
+            "properties": {
+                "communicationService": {
+                    "$ref": "#/definitions/response.RefractedFacetResponseEnrichedConfigItemCommunicationService"
+                },
+                "status": {
+                    "$ref": "#/definitions/enum.FacetStatus"
+                }
+            }
+        },
+        "response.RefractedFacetResponseEnrichedConfigItemCommunicationService": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "service": {
+                    "$ref": "#/definitions/enum.CommunicationService"
+                },
+                "value": {
                     "type": "string"
                 }
             }

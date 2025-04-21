@@ -9,6 +9,7 @@ import (
 
 type UserCommunicationServiceRepository interface {
 	FindManyByUserId(userId uuid.UUID) ([]model.UserCommunicationService, error)
+	FindManyByIds(ids []uint8) ([]model.UserCommunicationService, error)
 	FindManyByIdsAndUserId(ids []uint8, userId uuid.UUID) ([]model.UserCommunicationService, error)
 	FindOneByIDAndUserID(id uint8, userId uuid.UUID) (*model.UserCommunicationService, error)
 
@@ -32,6 +33,23 @@ func (r *userCommunicationServiceRepository) FindManyByUserId(userId uuid.UUID) 
 		Model(&model.UserCommunicationService{}).
 		Where("user_id = ?", userId).
 		Find(&userCommunicationServices).Error; err != nil {
+		return nil, err
+	}
+	return userCommunicationServices, nil
+}
+
+func (r *userCommunicationServiceRepository) FindManyByIds(ids []uint8) ([]model.UserCommunicationService, error) {
+	if len(ids) == 0 {
+		return []model.UserCommunicationService{}, nil
+	}
+
+	convertedIDs := make([]uint, len(ids))
+	for i, id := range ids {
+		convertedIDs[i] = uint(id)
+	}
+
+	var userCommunicationServices []model.UserCommunicationService
+	if err := r.db.Where("id IN ?", convertedIDs).Find(&userCommunicationServices).Error; err != nil {
 		return nil, err
 	}
 	return userCommunicationServices, nil

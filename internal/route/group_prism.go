@@ -16,5 +16,6 @@ func RegisterPrismRoutes(rg *gin.RouterGroup, db *gorm.DB) {
 		prisms.POST("", prismHandler.Create)
 		prisms.PATCH("/:prismId", prismHandler.Update)
 		prisms.DELETE("/:prismId", prismHandler.Delete)
+		prisms.POST("/:prismId/activate", prismHandler.Activate)
 	}
 }

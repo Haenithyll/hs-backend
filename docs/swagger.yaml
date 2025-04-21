@@ -58,6 +58,20 @@ definitions:
       userId:
         type: string
     type: object
+  model.User:
+    properties:
+      avatarURL:
+        description: nullable
+        type: string
+      email:
+        type: string
+      firstName:
+        type: string
+      id:
+        type: string
+      lastName:
+        type: string
+    type: object
   request.CreateFacetRequest:
     properties:
       color:
@@ -172,6 +186,8 @@ definitions:
         type: string
       id:
         type: integer
+      isActive:
+        type: boolean
       name:
         type: string
     type: object
@@ -211,6 +227,51 @@ definitions:
       id:
         type: string
       lastName:
+        type: string
+    type: object
+  response.RefractedFacet:
+    properties:
+      color:
+        type: string
+      configuration:
+        $ref: '#/definitions/response.RefractedFacetResponseEnrichedConfig'
+      id:
+        type: integer
+      label:
+        type: string
+      lastUpdatedAt:
+        type: string
+    type: object
+  response.RefractedFacetResponse:
+    properties:
+      refractedFacet:
+        $ref: '#/definitions/response.RefractedFacet'
+      user:
+        $ref: '#/definitions/model.User'
+    type: object
+  response.RefractedFacetResponseEnrichedConfig:
+    properties:
+      items:
+        items:
+          $ref: '#/definitions/response.RefractedFacetResponseEnrichedConfigItem'
+        type: array
+    type: object
+  response.RefractedFacetResponseEnrichedConfigItem:
+    properties:
+      communicationService:
+        $ref: '#/definitions/response.RefractedFacetResponseEnrichedConfigItemCommunicationService'
+      status:
+        $ref: '#/definitions/enum.FacetStatus'
+    type: object
+  response.RefractedFacetResponseEnrichedConfigItemCommunicationService:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      service:
+        $ref: '#/definitions/enum.CommunicationService'
+      value:
         type: string
     type: object
   response.UserCommunicationServiceResponse:
@@ -540,6 +601,29 @@ paths:
       summary: Activate prism
       tags:
       - Prisms
+  /api/refracted-facets:
+    get:
+      consumes:
+      - application/json
+      description: Returns refracted facets
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/response.RefractedFacetResponse'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/domain.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get refracted facets
+      tags:
+      - Refracted Facets
   /api/users/communication-services:
     get:
       consumes:

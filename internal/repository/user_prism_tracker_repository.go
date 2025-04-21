@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"errors"
 	"hs-backend/internal/model"
 	"time"
 
@@ -10,6 +11,7 @@ import (
 )
 
 type UserPrismTrackerRepository interface {
+	FindOneByUserId(userId uuid.UUID) (*uint8, error)
 	FindAllWithPrisms() ([]model.UserPrismTracker, error)
 
 	ActivatePrismByPrismIdAndUserId(prismId uint8, userId uuid.UUID) error
@@ -21,6 +23,20 @@ type userPrismTrackerRepository struct {
 
 func NewUserPrismTrackerRepository(db *gorm.DB) UserPrismTrackerRepository {
 	return &userPrismTrackerRepository{db}
+}
+
+func (r *userPrismTrackerRepository) FindOneByUserId(userId uuid.UUID) (*uint8, error) {
+	var prismId uint8
+	err := r.db.Model(&model.UserPrismTracker{}).
+		Select("prism_id").
+		Where("user_id = ?", userId).
+		Take(&prismId).Error
+
+	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
+		return nil, err
+	}
+
+	return &prismId, nil
 }
 
 func (r *userPrismTrackerRepository) FindAllWithPrisms() ([]model.UserPrismTracker, error) {
