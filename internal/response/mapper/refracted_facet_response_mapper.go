@@ -66,14 +66,6 @@ func ToRefractedFacetResponse(
 	return newRefractedFacetResponse(refractedUser, refractedFacet)
 }
 
-func ToEmptyRefractedFacetResponses(users []model.User) []response.RefractedFacetResponse {
-	refractedFacetResponses := make([]response.RefractedFacetResponse, 0, len(users))
-	for _, user := range users {
-		refractedFacetResponses = append(refractedFacetResponses, ToEmptyRefractedFacetResponse(user))
-	}
-	return refractedFacetResponses
-}
-
 func ToEmptyRefractedFacetResponse(user model.User) response.RefractedFacetResponse {
 	refractedResponseUser := newRefractedFacetResponseUser(user)
 

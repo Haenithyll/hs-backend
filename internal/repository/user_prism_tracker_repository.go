@@ -12,7 +12,7 @@ import (
 
 type UserPrismTrackerRepository interface {
 	FindOneByUserId(userId uuid.UUID) (*uint8, error)
-	FindAllWithPrisms() ([]model.UserPrismTracker, error)
+	FindAllWithPrismsAndUsers() ([]model.UserPrismTracker, error)
 
 	ActivatePrismByPrismIdAndUserId(prismId uint8, userId uuid.UUID) error
 }
@@ -39,9 +39,12 @@ func (r *userPrismTrackerRepository) FindOneByUserId(userId uuid.UUID) (*uint8, 
 	return &prismId, nil
 }
 
-func (r *userPrismTrackerRepository) FindAllWithPrisms() ([]model.UserPrismTracker, error) {
+func (r *userPrismTrackerRepository) FindAllWithPrismsAndUsers() ([]model.UserPrismTracker, error) {
 	var userPrismTrackers []model.UserPrismTracker
-	if err := r.db.Preload("Prism").Find(&userPrismTrackers).Error; err != nil {
+	if err := r.db.
+		Preload("Prism").
+		Preload("User").
+		Find(&userPrismTrackers).Error; err != nil {
 		return nil, err
 	}
 	return userPrismTrackers, nil

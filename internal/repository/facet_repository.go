@@ -48,7 +48,10 @@ func (r *facetRepository) FindManyRefractedByIds(ids []uint8) ([]model.Facet, er
 	}
 
 	var facets []model.Facet
-	if err := r.db.Where("id IN ?", convertedIDs).Select("id", "public_label", "color", "configuration").Find(&facets).Error; err != nil {
+	if err := r.db.
+		Where("id IN ?", convertedIDs).
+		Select("id", "user_id", "public_label", "color", "configuration").
+		Find(&facets).Error; err != nil {
 		return nil, err
 	}
 	return facets, nil

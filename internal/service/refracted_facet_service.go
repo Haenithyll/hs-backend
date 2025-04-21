@@ -36,21 +36,21 @@ func NewRefractedFacetService(
 // Fetches all refracted facets for every user except the current user.
 // It also retrieves related user communication services for DTO conversion.
 func (s *RefractedFacetService) GetRefractedFacets(userId uuid.UUID) (response.RefractedFacetResponses, *domain.DomainError) {
-	userPrismTrackers, err := s.UserPrismTrackerRepository.FindAllWithPrisms()
+	userPrismTrackers, err := s.UserPrismTrackerRepository.FindAllWithPrismsAndUsers()
 	if err != nil {
 		return nil, domain.NewDomainError(domain.ErrInternalServerError, "failed to get user prism trackers: "+err.Error())
 	}
 
-	users, err := s.UserRepository.FindAll()
-	if err != nil {
-		return nil, domain.NewDomainError(domain.ErrInternalServerError, "failed to get users: "+err.Error())
+	if len(userPrismTrackers) == 0 {
+		return []response.RefractedFacetResponse{}, nil
+	}
+
+	users := make([]model.User, 0, len(userPrismTrackers))
+	for _, userPrismTracker := range userPrismTrackers {
+		users = append(users, *userPrismTracker.User)
 	}
 
 	filteredUsers := filter_util.FilterUsers(users, userId)
-
-	if len(userPrismTrackers) == 0 {
-		return mapper.ToEmptyRefractedFacetResponses(filteredUsers), nil
-	}
 
 	lastUpdatedAtByUserIdMap := map_util.BuildLastUpdatedAtMapByUserId(userPrismTrackers)
 
@@ -117,7 +117,7 @@ func (s *RefractedFacetService) mapFacetsByUserIdAndExtractUserCommunicationServ
 	userCommunicationServiceIds := make([]uint8, 0)
 
 	for _, facet := range facets {
-		facetByUserIdMap[facet.User.ID] = facet
+		facetByUserIdMap[facet.UserId] = facet
 
 		for _, item := range facet.Configuration.Items {
 			userCommunicationServiceIds = append(userCommunicationServiceIds, item.Id)
