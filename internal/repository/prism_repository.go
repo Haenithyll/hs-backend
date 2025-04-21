@@ -11,6 +11,8 @@ type PrismRepository interface {
 	FindManyByUserId(userId uuid.UUID) ([]model.Prism, error)
 	FindOneByIDAndUserID(id uint8, userId uuid.UUID) (*model.Prism, error)
 
+	CountByFacetIdInConfiguration(facetId uint8) (int64, error)
+
 	CreateOne(prism *model.Prism) error
 	UpdateOne(prism *model.Prism) error
 
@@ -42,6 +44,24 @@ func (r *prismRepository) FindOneByIDAndUserID(id uint8, userId uuid.UUID) (*mod
 		return nil, err
 	}
 	return &prism, nil
+}
+
+func (r *prismRepository) CountByFacetIdInConfiguration(facetId uint8) (int64, error) {
+	var count int64
+	if err := r.db.Raw(`
+		SELECT COUNT(*) FROM prisms
+		WHERE 
+			(configuration->>'base')::int = ?
+			OR EXISTS (
+				SELECT 1
+				FROM jsonb_array_elements(configuration->'users') AS user_elem
+				WHERE (user_elem->>'facetId')::int = ?
+			)
+	`, facetId, facetId).Scan(&count).Error; err != nil {
+		return 0, err
+	}
+
+	return count, nil
 }
 
 func (r *prismRepository) CreateOne(prism *model.Prism) error {

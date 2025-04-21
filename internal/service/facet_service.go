@@ -18,14 +18,16 @@ import (
 
 type FacetService struct {
 	FacetRepository                    repository.FacetRepository
+	PrismRepository                    repository.PrismRepository
 	UserCommunicationServiceRepository repository.UserCommunicationServiceRepository
 }
 
 func NewFacetService(
 	facetRepository repository.FacetRepository,
+	prismRepository repository.PrismRepository,
 	userCommunicationServiceRepository repository.UserCommunicationServiceRepository,
 ) *FacetService {
-	return &FacetService{facetRepository, userCommunicationServiceRepository}
+	return &FacetService{facetRepository, prismRepository, userCommunicationServiceRepository}
 }
 
 // Fetches all facets associated with the given user ID.
@@ -112,8 +114,17 @@ func (s *FacetService) UpdateFacet(userId uuid.UUID, request request.UpdateFacet
 	return &response, nil
 }
 
-// Deletes a facet for the given user
+// Deletes a facet for the given user after ensuring that it is not used in any prism configuration
 func (s *FacetService) DeleteFacet(userId uuid.UUID, facetId uint8) *domain.DomainError {
+	count, err := s.PrismRepository.CountByFacetIdInConfiguration(facetId)
+	if err != nil {
+		return domain.NewDomainError(domain.ErrInternalServerError, "failed to count prism using the facet: "+err.Error())
+	}
+
+	if count > 0 {
+		return domain.NewDomainError(domain.ErrBadRequest, fmt.Sprintf("facet is in use in %d prism(s)", count))
+	}
+
 	if err := s.FacetRepository.DeleteOneByIDAndUserID(facetId, userId); err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return domain.NewDomainError(domain.ErrNotFound, "facet not found")
