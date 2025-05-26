@@ -7,3 +7,5 @@ type UserResponse struct {
 	AvatarURL string `json:"avatarUrl,omitempty"`
 	Email     string `json:"email"`
 }
+
+type UserResponses []UserResponse

@@ -17,19 +17,19 @@ func NewUserService(userRepository repository.UserRepository) *UserService {
 	return &UserService{UserRepository: userRepository}
 }
 
-func (s *UserService) GetUserById(userId uuid.UUID) (*response.UserResponse, *domain.DomainError) {
-	user, err := s.UserRepository.FindOneById(userId)
+func (s *UserService) GetAllUsers() (*response.UserResponses, *domain.DomainError) {
+	users, err := s.UserRepository.FindAll()
 	if err != nil {
-		return nil, domain.NewDomainError(domain.ErrNotFound, "user not found")
+		return nil, domain.NewDomainError(domain.ErrInternalServerError, "failed to get all users: "+err.Error())
 	}
 
-	response := mapper.ToUserResponse(user)
+	responses := mapper.ToUserResponses(users)
 
-	return response, nil
+	return &responses, nil
 }
 
-func (s *UserService) GetUserByEmail(email string) (*response.UserResponse, *domain.DomainError) {
-	user, err := s.UserRepository.FindOneByEmail(email)
+func (s *UserService) GetUserById(userId uuid.UUID) (*response.UserResponse, *domain.DomainError) {
+	user, err := s.UserRepository.FindOneById(userId)
 	if err != nil {
 		return nil, domain.NewDomainError(domain.ErrNotFound, "user not found")
 	}

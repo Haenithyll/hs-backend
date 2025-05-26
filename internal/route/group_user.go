@@ -12,7 +12,7 @@ func RegisterUserRoutes(rg *gin.RouterGroup, db *gorm.DB) {
 
 	users := rg.Group("/users")
 	{
-		users.GET("/me", userHandler.GetUserMe)
-		users.GET("/email/:email", userHandler.GetUserByEmail)
+		users.GET("/", userHandler.GetAll)
+		users.GET("/me", userHandler.GetMe)
 	}
 }

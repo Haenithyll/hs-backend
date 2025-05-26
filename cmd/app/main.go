@@ -36,17 +36,24 @@ func main() {
 		r.Use(middleware.LoggerMiddleware())
 	}
 	if err := r.SetTrustedProxies(nil); err != nil {
-		log.Fatalf("Failed to set trusted proxies: %v", err)
+		log.Panicf("Failed to set trusted proxies: %v", err)
 	}
+
+	// Redis Publisher
+	// pub, err := config.NewPublisher()
+	// if err != nil {
+	// 	log.Panicf("Failed to create publisher: %v", err)
+	// }
+	// defer pub.Close()
 
 	env := config.GetEnvOrPanic("ENV")
 	if env == "local" || env == "develop" {
-		r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+		r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, ginSwagger.DocExpansion("none")))
 	}
 	route.RegisterRoutes(r, db)
 
 	log.Printf("Server running on port %s...", port)
 	if err := r.Run(":" + port); err != nil {
-		log.Fatalf("Failed to run server: %v", err)
+		log.Panicf("Failed to run server: %v", err)
 	}
 }
