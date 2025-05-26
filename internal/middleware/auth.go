@@ -61,6 +61,7 @@ func AuthMiddleware() gin.HandlerFunc {
 			c.Set("user_id", userId)
 
 			c.Next()
+			return
 		}
 
 		if apiKeyHeader != "" {
@@ -90,6 +91,6 @@ func AuthMiddleware() gin.HandlerFunc {
 			return
 		}
 
-		c.AbortWithStatusJSON(http.StatusUnauthorized, domain.ErrorResponse{Error: "missing Authorization or X-API-Key header"})
+		c.AbortWithStatusJSON(http.StatusUnauthorized, domain.ErrorResponse{Error: "missing Authorization or API-Key header"})
 	}
 }
